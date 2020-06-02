@@ -41,6 +41,10 @@ class Kernel
         }
 
         $page = new $controller($this->data);
-        $page->run();
+        $content = $page->run();
+
+        @ob_start();
+        print($content);
+        @ob_flush();
     }
 }

@@ -4,26 +4,11 @@
 namespace App\Controllers;
 
 
+use App\View;
+
 class AdminController extends Controller
 {
     protected function get_index(){
-        echo "Admin Panel<hr/>";
-
-        echo var_export($this->data["request_type"],true);
-        print("<br/>");
-        echo var_export($this->data["get_data"],true);
-        print("<br/>");
-        echo var_export($this->data["post_data"],true);
-
-        if($this->data["request_type"] == 'GET'){
-//        switch ($this->get){
-//            return $this->index();
-//        }
-        }
-        elseif($this->data["request_type"] == 'POST'){
-//        switch ($this->get){
-//            return $this->index();
-//        }
-        }
+        return View::show("admin.index");
     }
 }
