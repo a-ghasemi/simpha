@@ -9,7 +9,7 @@ class Kernel
     private $url;
     private $data;
 
-    public function __construct()
+    public function __construct($debug_mode = false)
     {
         $this->data["request_type"] = $_SERVER['REQUEST_METHOD'];
 
@@ -21,12 +21,15 @@ class Kernel
         $url = explode('/',parse_url(strtolower(trim($url)))['path']);
         array_shift($url);
 
-        $this->url['class'] = array_shift($url) ?? 'home';
-        $this->url['method'] = array_shift($url) ?? 'index';
+        $tmp = array_shift($url);
+        $this->url['class'] = (!empty($tmp))? $tmp : 'home';
+        $tmp = array_shift($url);
+        $this->url['method'] = (!empty($tmp))? $tmp : 'index';
         $this->url['params'] = $url ?? [];
 
         $this->data["url"] = $this->url;
 
+        $this->data['debug_mode'] = $debug_mode;
     }
 
     public function run(){
