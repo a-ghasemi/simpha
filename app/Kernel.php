@@ -4,13 +4,19 @@
 namespace App;
 
 
+use App\Functions\EnvParser;
+
 class Kernel
 {
     private $url;
     private $data;
 
+    static $env;
+
     public function __construct($debug_mode = false)
     {
+        Self::$env = (new EnvParser(".env"))->parse();
+
         $this->data["request_type"] = $_SERVER['REQUEST_METHOD'];
 
         $this->data["get_data"] = $_GET;
