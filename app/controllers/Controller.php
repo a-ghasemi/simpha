@@ -14,7 +14,11 @@ class Controller
     }
 
     public function run(){
-        $function = $this->data['url']['method'];
+        $function = $this->data['request_type'] . '_' . $this->data['url']['method'];
+
+        if(!method_exists($this,$function)){
+            $function = 'any_' . $this->data['url']['method'];
+        }
 
         if(!method_exists($this,$function)){
             header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found", true, 404);

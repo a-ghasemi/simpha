@@ -6,7 +6,7 @@ namespace App\Controllers;
 
 class HomeController extends Controller
 {
-    protected function index(){
+    protected function get_index(){
         echo 'Home Page';
     }
 }

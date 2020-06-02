@@ -6,7 +6,7 @@ namespace App\Controllers;
 
 class AdminController extends Controller
 {
-    protected function index(){
+    protected function get_index(){
         echo "Admin Panel<hr/>";
 
         echo var_export($this->data["request_type"],true);
