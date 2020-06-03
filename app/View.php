@@ -9,7 +9,7 @@ class View
     public function __construct($file)
     {
         $file = implode("/",explode('.',$file));
-        $this->file = "views/$file.html";
+        $this->file = "../views/$file.html";
     }
 
     public function render(){
