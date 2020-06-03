@@ -11,6 +11,7 @@ this means: if you want above route, follow these steps:
 3. specify request type, `post_method()`, just gets POST request
 * your options are HTTP request types: `get_`,`post_`,`put_`,`patch_`,`delete_`,...
 * if you are going to accept all kind of methods, use `any_`
+* no route.php file, because this is **SIMPLE MVC**
 
 ## Contribution
 If you want to participate in this repo, you always welcomed.
