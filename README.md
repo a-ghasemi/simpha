@@ -1,4 +1,4 @@
-# Git to Website Project
+# A MVC framework over PHP
 Under development ...
 
 ### Documentation
