@@ -2,18 +2,21 @@
 namespace App;
 
 
+use Jenssegers\Blade\Blade;
+
 class View
 {
     private $file;
+    private $blade;
 
     public function __construct($file)
     {
-        $file = implode("/",explode('.',$file));
-        $this->file = "../views/$file.html";
+        $this->file = $file;
+        $this->blade = new Blade('../views','../storage/views');
     }
 
     public function render(){
-        return file_get_contents($this->file);
+        return $this->blade->render($this->file);
     }
 
     static function show($file){
