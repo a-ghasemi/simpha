@@ -1,5 +1,10 @@
 # A MVC framework over PHP
-Under development ...
+
+## Getting Started
+1. run `composer install` in root folder
+2. create your routes
+3. create your views
+4. enjoy
 
 ## Documentation
 ### Routing
