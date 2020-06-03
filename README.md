@@ -8,12 +8,12 @@
 
 ## Documentation
 ### Routing
-route format is: example.com/class/method/slashed_params
+route format is: example.com/foo/bar/slashed_params
 
 this means: if you want above route, follow these steps:
-1. create ClassController.php in app/controllers
-2. create `pubic function method()` in it
-3. specify request type, `post_method()`, just gets POST request
+1. create FooController.php in app/controllers
+2. create `pubic function bar()` in it
+3. specify request type, `post_bar()`, just gets POST request
 * your options are HTTP request types: `get_`,`post_`,`put_`,`patch_`,`delete_`,...
 * if you are going to accept all kind of methods, use `any_`
 * no route.php file, because this is **SIMPLE MVC**
