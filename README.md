@@ -30,7 +30,7 @@ this means, send <root>/views/home/index.blade.php to client
 ## Models
 my next TODO ...
 
-##.env
+## .env
 You have .env file here. and an ENV_Parser helps to parse it.
 
 Read env flags like this: (*I promise make this easier in the feature*)
