@@ -1,10 +1,11 @@
-# A MVC framework over PHP
+# SIMPHA (*a simple MVC framework over PHP*)
 
 ## Getting Started
-1. run `composer install` in root folder
-2. create your routes
-3. create your views
-4. enjoy
+1. clone it
+2. run `composer install` in its root folder
+3. create your routes
+4. create your views
+5. enjoy
 
 ## Documentation
 ### Routing
