@@ -13,6 +13,23 @@ this means: if you want above route, follow these steps:
 * if you are going to accept all kind of methods, use `any_`
 * no route.php file, because this is **SIMPLE MVC**
 
+## Views
+if you want to return a view as a result of a route in corresponded function (that described in Routing section), do this:
+> return View::show('home.index')
+
+this means, send <root>/views/home/index.blade.php to client
+* You have powerful **blade engine** here, many thanks to @jenssegers
+* Do not echo anything, because it is MVC
+
+## Models
+my next TODO ...
+
+##.env
+You have .env file here. and an ENV_Parser helps to parse it.
+
+Read env flags like this: (*I promise make this easier in the feature*)
+> \App\Kernel::$env['flag_label']
+
 ## Contribution
 If you want to participate in this repo, you always welcomed.
 Parts to contribution:
