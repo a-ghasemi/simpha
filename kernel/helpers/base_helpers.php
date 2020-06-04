@@ -17,5 +17,18 @@ function redirect($target, $status_code = 200)
 
 function base_dir($dir = '')
 {
-    return __DIR__ . '/../../' . $dir . '/';
+    return realpath(__DIR__ . '/../../') . '/' . $dir;
+}
+
+function storage_dir($dir = '')
+{
+    return base_dir('storage') . '/' . $dir;
+}
+
+if (!function_exists('dd')) {
+    function dd()
+    {
+        foreach (func_get_args() as $arg) var_dump($arg);
+        die();
+    }
 }
