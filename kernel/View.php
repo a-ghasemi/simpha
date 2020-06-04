@@ -1,5 +1,5 @@
 <?php
-namespace App\System;
+namespace Kernel;
 
 
 use Jenssegers\Blade\Blade;
@@ -13,7 +13,7 @@ class View
     public function __construct($file)
     {
         $this->file = $file;
-        $this->blade = new Blade('../views','../storage/views');
+        $this->blade = new Blade('../app/views','../storage/views');
     }
 
     public function render(){

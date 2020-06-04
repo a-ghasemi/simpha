@@ -1,6 +1,6 @@
 <?php
 
-namespace App\System;
+namespace Kernel;
 
 
 class EnvParser

@@ -1,10 +1,6 @@
 <?php
 
-
-namespace App\System;
-
-
-use App\System\EnvParser;
+namespace Kernel;
 
 class Kernel
 {
@@ -51,12 +47,14 @@ class Kernel
 
         if(is_object($ret)){
             switch(get_class($ret)){
-                case 'App\System\View':
+                case 'Kernel\View':
                     $ret->getContent();
                     break;
-                case 'App\System\Redirect':
+                case 'Kernel\Redirect':
                     header("Location:$ret");
                     break;
+                default:
+                    echo "Class ".get_class($ret)." is not cased yet.";
             }
         }
         elseif(is_string($ret)){

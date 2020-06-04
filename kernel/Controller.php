@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\System;
+namespace Kernel;
 
 class Controller
 {
