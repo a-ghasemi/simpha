@@ -13,6 +13,9 @@
         "psr-4": {
             "Kernel\\": "kernel",
             "App\\": "app"
-        }
+        },
+        "files": [
+            "kernel/helpers/base_helpers.php"
+        ]
     }
 }

@@ -32,10 +32,10 @@ this means, send <root>/app/views/home/index.blade.php to client
 my next TODO ...
 
 ## .env
-You have .env file here. and an ENV_Parser helps to parse it.
+You have .env file here, and an ENV_Parser helps to parse it.
 
-Read env flags like this: (*I promise make this easier in the feature*)
-> \App\Kernel::$env['flag_label']
+Read env flags like this:
+> env_get('flag_label','default_value')
 
 ## Contribution
 If you want to participate in this repo, you always welcomed.
