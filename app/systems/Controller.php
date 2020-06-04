@@ -1,8 +1,7 @@
 <?php
 
 
-namespace App\Controllers;
-
+namespace App\System;
 
 class Controller
 {

@@ -3,8 +3,8 @@
 
 namespace App\Controllers;
 
-
-use App\View;
+use App\System\Controller;
+use App\System\View;
 
 class AdminController extends Controller
 {

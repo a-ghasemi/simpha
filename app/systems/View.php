@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\System;
 
 
 use Jenssegers\Blade\Blade;
@@ -7,6 +7,7 @@ use Jenssegers\Blade\Blade;
 class View
 {
     private $file;
+    private $content;
     private $blade;
 
     public function __construct($file)
@@ -16,10 +17,17 @@ class View
     }
 
     public function render(){
-        return $this->blade->render($this->file);
+        $this->content = $this->blade->render($this->file);
+        return $this;
     }
 
     static function show($file){
         return (new Self($file))->render();
+    }
+
+    public function getContent(){
+        @ob_start();
+        print($this->content);
+        @ob_flush();
     }
 }

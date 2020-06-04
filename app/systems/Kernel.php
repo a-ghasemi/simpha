@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App;
+namespace App\System;
 
 
-use App\Functions\EnvParser;
+use App\System\EnvParser;
 
 class Kernel
 {
@@ -47,10 +47,23 @@ class Kernel
         }
 
         $page = new $controller($this->data);
-        $content = $page->run();
+        $ret = $page->run();
 
-        @ob_start();
-        print($content);
-        @ob_flush();
+        if(is_object($ret)){
+            switch(get_class($ret)){
+                case 'App\System\View':
+                    $ret->getContent();
+                    break;
+                case 'App\System\Redirect':
+                    header("Location:$ret");
+                    break;
+            }
+        }
+        elseif(is_string($ret)){
+            @ob_start();
+            print($ret);
+            @ob_flush();
+        }
+
     }
 }
