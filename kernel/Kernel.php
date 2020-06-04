@@ -51,7 +51,7 @@ class Kernel
                     $ret->getContent();
                     break;
                 case 'Kernel\Redirect':
-                    header("Location:$ret");
+                    $ret->go();
                     break;
                 default:
                     echo "Class ".get_class($ret)." is not cased yet.";
