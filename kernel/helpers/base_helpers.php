@@ -7,10 +7,10 @@ function env_get($key, $default = null)
 
 function view($blade_path)
 {
-    \Kernel\View::show($blade_path);
+    return \Kernel\View::show($blade_path);
 }
 
 function redirect($target, $status_code = 200)
 {
-    \Kernel\Redirect::to($target, $status_code);
+    return \Kernel\Redirect::to($target, $status_code);
 }

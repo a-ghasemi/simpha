@@ -54,13 +54,16 @@ class Kernel
                     $ret->go();
                     break;
                 default:
-                    echo "Class ".get_class($ret)." is not cased yet.";
+                    print("Kernel Error: Class ".get_class($ret)." is not cased yet.");
             }
         }
         elseif(is_string($ret)){
             @ob_start();
             print($ret);
             @ob_flush();
+        }
+        elseif(empty($ret)){
+            print('Kernel Warning: Content is Empty!');
         }
 
     }

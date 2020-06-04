@@ -17,6 +17,7 @@ class EnvParser
         $content = file_get_contents($this->env_address);
         $content = explode("\n", $content);
         foreach($content as $line){
+            if(empty($line))continue;
             $data = explode("=",$line);
             $this->env_data[trim($data[0])] = trim($data[1]);
         }
