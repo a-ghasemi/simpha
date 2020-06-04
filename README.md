@@ -3,9 +3,9 @@
 ## Getting Started
 1. clone it
 2. run `composer install` in its root folder
-3. create your routes
-4. create your views
-5. enjoy
+3. [in **app** folder] create your classes (routes will generate automatically from these classes)
+4. [in **app** folder] create your views
+5. enjoy!
 
 ## Documentation
 ### Routing
@@ -23,7 +23,7 @@ this means: if you want above route, follow these steps:
 if you want to return a view as a result of a route in corresponded function (that described in Routing section), do this:
 > return View::show('home.index')
 
-this means, send <root>/views/home/index.blade.php to client
+this means, send <root>/app/views/home/index.blade.php to client
 * You have powerful **blade engine** here, many thanks to @jenssegers
 * Do not echo anything, because it is MVC
 
