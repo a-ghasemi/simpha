@@ -14,3 +14,8 @@ function redirect($target, $status_code = 200)
 {
     return \Kernel\Redirect::to($target, $status_code);
 }
+
+function base_dir($dir = '')
+{
+    return __DIR__ . '/../../' . $dir . '/';
+}
