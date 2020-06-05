@@ -8,6 +8,6 @@ use Kernel\Command;
 class Version extends Command
 {
     protected function index(){
-        $this->comment('v 0.9');
+        $this->comment('Simpha version 0.9');
     }
 }

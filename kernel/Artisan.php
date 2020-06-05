@@ -24,7 +24,7 @@ class Artisan
         }
 
         $command = explode(':', trim(array_shift($args)));
-        $this->command = array_shift($command);
+        $this->command = str_replace('-','', array_shift($command));
         if (count($command) > 0) $this->subcommands = $command;
 
         if (count($args) > 0) $this->parameters = explode(' ', trim(array_shift($args)));
