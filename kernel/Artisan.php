@@ -14,7 +14,7 @@ class Artisan
 
     public function __construct($debug = false)
     {
-        Self::$env = (new EnvParser("../.env"))->parse();
+        Self::$env = (new EnvParser(base_path(".env")))->parse();
 
         $this->debug = $debug;
 

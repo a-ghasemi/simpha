@@ -11,7 +11,7 @@ class Kernel
 
     public function __construct($debug_mode = false)
     {
-        Self::$env = (new EnvParser("../.env"))->parse();
+        Self::$env = (new EnvParser(base_path(".env")))->parse();
 
         $this->data["request_type"] = $_SERVER['REQUEST_METHOD'];
 
