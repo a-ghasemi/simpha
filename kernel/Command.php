@@ -35,6 +35,7 @@ abstract class Command
     protected function error($message)
     {
         print($message."\n");
+        die();
     }
 
 }
