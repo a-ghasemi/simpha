@@ -8,11 +8,14 @@ class Artisan
     private $command;
     private $subcommands;
     private $parameters;
+    static $env;
 
     private $debug;
 
     public function __construct($debug = false)
     {
+        Self::$env = (new EnvParser("../.env"))->parse();
+
         $this->debug = $debug;
 
         $args = $_SERVER['argv'];

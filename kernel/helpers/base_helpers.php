@@ -2,7 +2,7 @@
 
 function env_get($key, $default = null)
 {
-    return \Kernel\Kernel::$env[$key] ?? $default;
+    return \Kernel\Kernel::$env[$key] ?? \Kernel\Artisan::$env[$key] ?? $default;
 }
 
 function view($blade_path)
