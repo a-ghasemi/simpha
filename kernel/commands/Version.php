@@ -7,7 +7,7 @@ use Kernel\Command;
 
 class Version extends Command
 {
-    protected function index(){
+    public function index(){
         $this->comment('Simpha version 0.9');
     }
 }

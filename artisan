@@ -4,5 +4,5 @@ include("vendor/autoload.php");
 
 use \Kernel\Artisan;
 
-$artisan = new Artisan(true);
+$artisan = new Artisan(false);
 $artisan->run();

@@ -50,7 +50,29 @@ class Artisan
     public function help(): void
     {
         if($this->debug) dump($this->command,$this->subcommands,$this->parameters);
-        print('Help Menu'."\n");
+        print("=================\n");
+
+        $system_classes = ClassMap::map('Kernel\\Command',kernel_path('commands'));
+        $user_classes = ClassMap::map('App\\Command',app_path('commands'));
+
+        print("System Commands\n");
+        foreach($system_classes as $class=>$methods){
+            foreach($methods as $method){
+                print("\t".$class.($method?":".$method:'')."\n");
+            }
+            print("\n");
+        }
+
+        print("=================\n");
+        print("User Commands\n");
+        foreach($user_classes as $class=>$methods){
+            foreach($methods as $method){
+                print("\t".$class.($method?":".$method:'')."\n");
+            }
+            print("\n");
+        }
+
+
         return;
     }
 }
