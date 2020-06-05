@@ -31,6 +31,17 @@ this means, send <root>/app/views/home/index.blade.php to client
 ## Models
 my next TODO ...
 
+## Artisan Commands
+run artisan by `php artisan`
+
+You can create your own commands simply by creating its class in `app/commands`
+
+For a command like `php artisan foo:bar params` just create a `Foo.php` as a class and define `public funtion bar()` in it
+
+For a command like `php artisan foo params` define method `public function index()` like Demo class
+
+To get version number of *Simpha*, run `php artisan version`
+
 ## .env
 You have .env file here, and an ENV_Parser helps to parse it.
 
