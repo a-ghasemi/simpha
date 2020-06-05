@@ -1,0 +1,8 @@
+<?php
+
+include("vendor/autoload.php");
+
+use \Kernel\Artisan;
+
+$artisan = new Artisan(true);
+$artisan->run();

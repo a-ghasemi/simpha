@@ -12,7 +12,7 @@ class Controller
         $this->data = $data;
     }
 
-    public function run(){
+    final public function run(){
         $function = $this->data['request_type'] . '_' . $this->data['url']['method'];
 
         if(!method_exists($this,$function)){

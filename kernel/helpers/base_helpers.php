@@ -25,6 +25,12 @@ function storage_dir($dir = '')
     return base_dir('storage') . '/' . $dir;
 }
 
+if (!function_exists('dump')) {
+    function dump()
+    {
+        foreach (func_get_args() as $arg) var_dump($arg);
+    }
+}
 if (!function_exists('dd')) {
     function dd()
     {
