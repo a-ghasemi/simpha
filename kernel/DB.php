@@ -92,7 +92,7 @@ class DB
         return true;
     }
 
-    public function select($query){
+    public function gselect($query){
 //        $query = "SELECT id, firstname, lastname FROM MyGuests";
         $result = $this->connection->query($query);
 
@@ -107,4 +107,49 @@ class DB
         }
     }
 
+
+    public function drop_table(string $table): void
+    {
+        $sql = "DROP TABLE IF EXISTS $table;";
+        $this->connection->query($sql);
+        echo "Table $table dropped successfully\n";
+    }
+
+    public function create_table(string $table, array $fields): void
+    {
+        $sql = "CREATE TABLE IF NOT EXISTS $table " .
+            " (" . implode(',', $fields) . ");";
+        $this->connection->query($sql);
+        echo "Table $table created successfully\n";
+    }
+
+    public function insert(string $table, array $fields, array $values): void
+    {
+        $sql = "INSERT INTO `$table`" .
+            " (`" . implode('`,`', $fields) . "`)" .
+            " VALUES ('" . implode("','", $values) . "');";
+        $this->connection->query($sql);
+        echo "One record created successfully\n";
+    }
+
+    public function update(string $table, array $fields, array $values, string $select): bool
+    {
+        $data = array_combine($fields,$values);
+        $content = [];
+        foreach ($data as $key => $val) {
+            $content[] = "`$key` = '$val'";
+        }
+        $content = implode(',', $content);
+
+        $sql = "UPDATE `$table`" .
+            " SET $content" .
+            " WHERE $select;" ;
+        $this->connection->query($sql);
+        return true;
+    }
+
+
+
+
+    
 }

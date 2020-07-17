@@ -42,7 +42,7 @@ class ClassMap
                     elseif(in_array($method,['index'])) $methods[$i] = '';
                     else $methods[$i] = str_replace('_',':',$method);
                 }
-                $class = strtolower(str_replace($namespace.'\\','',$class));
+                $class = str_replace($namespace.'\\','',$class);
                 $classes[$class] = array_values($methods);
             }
         }

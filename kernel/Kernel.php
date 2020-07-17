@@ -50,7 +50,7 @@ class Kernel
         $this->database = new DB($host, $port, $user, $pass, $db_name);
         $this->database->connect();
         if($this->database->error){
-            log("Source Database Connection Failed!");
+            die("Database Connection Failed!");
         }
     }
 
