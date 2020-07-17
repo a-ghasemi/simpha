@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Kernel;
 
 
 class DB
@@ -33,7 +33,10 @@ class DB
     }
 
     public function connect(){
-        $this->connection = new \mysqli($this->server_name, $this->username, $this->password, $this->db_name);
+        try{
+            $this->connection = new \mysqli($this->server_name, $this->username, $this->password, $this->db_name);
+        }
+        catch(\Exception $e){}
 
         if ($this->connection->connect_error) {
             $this->error = $this->connection->connect_error;
