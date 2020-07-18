@@ -2,7 +2,7 @@
 
 namespace Kernel;
 
-use App\DB;
+use Kernel\DB;
 
 class Kernel
 {
@@ -11,6 +11,7 @@ class Kernel
     private $database;
 
     static $env;
+    static $global_errors;
 
     public function __construct($debug_mode = false)
     {
@@ -50,7 +51,7 @@ class Kernel
         $this->database = new DB($host, $port, $user, $pass, $db_name);
         $this->database->connect();
         if($this->database->error){
-            die("Database Connection Failed!");
+            Self::$global_errors[] = "Database Connection Failed!";
         }
     }
 

@@ -1,5 +1,12 @@
 <?php
 
+function global_errors($key = null)
+{
+    return $key ?
+            \Kernel\Kernel::$global_errors[$key] ?? \Kernel\Artisan::$global_errors[$key] ?? null
+            : \Kernel\Kernel::$global_errors ?? \Kernel\Artisan::$global_errors ?? null;
+}
+
 function env_get($key, $default = null)
 {
     return \Kernel\Kernel::$env[$key] ?? \Kernel\Artisan::$env[$key] ?? $default;

@@ -69,6 +69,15 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+
+            .errors{
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                color: #a00;
+                padding: 10px;
+            }
+
         </style>
     </head>
     <body>
@@ -85,5 +94,13 @@
                 </div>
             </div>
         </div>
+
+        @if(global_errors())
+            <div class="errors">
+                @foreach(global_errors() as $error)
+                    <div class="error">{{ $error }}</div>
+                @endforeach
+            </div>
+        @endif
     </body>
 </html>
