@@ -30,7 +30,10 @@ class Db extends Command
             $obj = $namespace . "\\" . $class;
             $obj = new $obj;
             $obj->up();
-            $this->comment('Table [$class] Created Successfully.');
+
+            # TODO: Create regex to remove CREATE####TABLE around $class
+
+            $this->comment("Table [$class] Created Successfully.");
         }
 
     }
