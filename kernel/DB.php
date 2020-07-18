@@ -115,12 +115,12 @@ class DB
         echo "Table $table dropped successfully\n";
     }
 
-    public function create_table(string $table, array $fields): void
+    public function create_table(string $table, array $fields): ?bool
     {
         $sql = "CREATE TABLE IF NOT EXISTS $table " .
             " (" . implode(',', $fields) . ");";
         $this->connection->query($sql);
-        echo "Table $table created successfully\n";
+        return true;
     }
 
     public function insert(string $table, array $fields, array $values): void

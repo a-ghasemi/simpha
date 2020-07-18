@@ -3,6 +3,7 @@
 
 namespace Kernel;
 
+use Kernel\DB;
 
 class Migration
 {
@@ -11,11 +12,11 @@ class Migration
     public function __construct()
     {
         $this->database = new DB(
+            env_get('DB_HOST', 'localhost'),
+            env_get('DB_PORT', 3306),
             env_get('DB_USER'),
             env_get('DB_PASS'),
             env_get('DB_NAME'),
-            env_get('DB_HOST', 'localhost'),
-            env_get('DB_PORT', 3306),
         );
         $this->database->connect();
         if($this->database->error){
@@ -24,11 +25,11 @@ class Migration
     }
 
     function drop_table($table_name){
-        $sql = "DROP TABLE IF EXISTS $table_name;";
-        $this->database->query($sql);
+        $this->database->drop_table($table_name);
     }
 
-    function create_table($table_name, $structure){
+    function create_table($table_name, $structure)
+    {
         $fields = [];
         foreach($structure as $field){
             if(is_array($field))
@@ -40,9 +41,7 @@ class Migration
             }
         }
 
-        $sql = "CREATE TABLE IF NOT EXISTS $table_name " .
-            " (" . implode(',', $fields) . ");";
-        $this->database->query($sql);
+        $this->database->create_table($table_name, $fields);
     }
 
     function autoincremental($name, $length = 7){
