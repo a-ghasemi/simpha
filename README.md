@@ -4,6 +4,7 @@
 1. clone it
 2. run `composer install` on the root folder
 3. run `composer dump-autoload -o` on the root folder
+3. run `cp .env.example .env` on the root folder
 4. [in **app** folder] create your classes (routes will generate automatically from these classes)
 5. [in **app** folder] create your views
 6. if you like it, **star** it
