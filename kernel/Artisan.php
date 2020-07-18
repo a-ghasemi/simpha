@@ -61,7 +61,7 @@ class Artisan
         print("System Commands\n");
         foreach($system_classes as $class=>$methods){
             foreach($methods as $method){
-                print("\t".strtolwer($class).($method?":".$method:'')."\n");
+                print("\t".strtolower($class).($method?":".$method:'')."\n");
             }
             print("\n");
         }
@@ -70,7 +70,7 @@ class Artisan
         print("User Commands\n");
         foreach($user_classes as $class=>$methods){
             foreach($methods as $method){
-                print("\t".strtolwer($class).($method?":".$method:'')."\n");
+                print("\t".strtolower($class).($method?":".$method:'')."\n");
             }
             print("\n");
         }
