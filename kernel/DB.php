@@ -112,7 +112,7 @@ class DB
     {
         $sql = "DROP TABLE IF EXISTS $table;";
         $this->connection->query($sql);
-        echo "Table $table dropped successfully\n";
+        return true;
     }
 
     public function create_table(string $table, array $fields): ?bool
