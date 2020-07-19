@@ -92,15 +92,39 @@ class DB
         return true;
     }
 
-    public function gselect($query){
-//        $query = "SELECT id, firstname, lastname FROM MyGuests";
-        $result = $this->connection->query($query);
+    public function gSelect(string $table, array $fields, string $where_clause){
+        $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
+        $content = !empty($fields) ? "`$content`" : $content ;
+
+        $sql = "SELECT $content" .
+            " FROM $table" .
+            " WHERE $where_clause LIMIT 1;" ;
+
+        $result = $this->connection->query($sql);
 
         if ($result->num_rows > 0) {
             // output data of each row
             while($row = $result->fetch_assoc()) {
                 yield $row;
             }
+        }
+        else {
+            return null;
+        }
+    }
+
+    public function oneSelect(string $table, array $fields, string $where_clause){
+        $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
+        $content = !empty($fields) ? "`$content`" : $content ;
+
+        $sql = "SELECT $content" .
+            " FROM $table" .
+            " WHERE $where_clause LIMIT 1;" ;
+
+        $result = $this->connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
         }
         else {
             return null;
