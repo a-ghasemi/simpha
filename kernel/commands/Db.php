@@ -13,11 +13,11 @@ class Db extends Command
     public function check()
     {
         $this->connectDatabase(
+            env_get('DB_HOST', 'localhost'),
+            env_get('DB_PORT', 3306),
             env_get('DB_USER'),
             env_get('DB_PASS'),
             env_get('DB_NAME'),
-            env_get('DB_HOST', 'localhost'),
-            env_get('DB_PORT', 3306),
         );
         $this->comment('Database Connection Successfully.');
     }
