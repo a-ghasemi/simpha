@@ -113,13 +113,19 @@ class DB
         }
     }
 
-    public function oneSelect(string $table, array $fields, string $where_clause){
+    public function oneSelect(string $table, array $fields, array $where_clause){
         $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
         $content = !empty($fields) ? "`$content`" : $content ;
 
+        $w_str = [];
+        foreach($where_clause as $field => $val){
+            $w_str[] = "`$field` = $val";
+        }
+        $w_str = implode(" AND ", $w_str);
+
         $sql = "SELECT $content" .
             " FROM $table" .
-            " WHERE $where_clause LIMIT 1;" ;
+            " WHERE $w_str LIMIT 1;" ;
 
         $result = $this->connection->query($sql);
 
@@ -147,16 +153,17 @@ class DB
         return true;
     }
 
-    public function insert(string $table, array $fields, array $values): ?bool
+    public function insert(string $table, array $fields): ?bool
     {
         $sql = "INSERT INTO `$table`" .
-            " (`" . implode('`,`', $fields) . "`)" .
-            " VALUES ('" . implode("','", $values) . "');";
+            " (`" . implode('`,`', array_keys($fields)) . "`)" .
+            " VALUES ('" . implode("','", array_values($fields)) . "');";
+
         $this->connection->query($sql);
         return true; // TODO: return insert_id
     }
 
-    public function update(string $table, array $fields, array $values, string $where_clause): ?bool
+    public function update(string $table, array $fields, array $values, array $where_clause): ?bool
     {
         $data = array_combine($fields,$values);
         $content = [];
@@ -165,15 +172,20 @@ class DB
         }
         $content = implode(',', $content);
 
+        $w_str = [];
+        foreach($where_clause as $field => $val){
+            $w_str[] = "`$field` = $val";
+        }
+        $w_str = implode(" AND ", $w_str);
+
         $sql = "UPDATE `$table`" .
             " SET $content" .
-            " WHERE $where_clause;" ;
+            " WHERE $w_str;" ;
         $this->connection->query($sql);
         return true;
     }
 
-    # TODO: where_clause must be associative array, to check field in insert or update
-    public function insertOrUpdate(string $table, array $fields, array $values, string $where_clause): ?bool
+    public function insertOrUpdate(string $table, array $fields, array $values, array $where_clause): ?bool
     {
         $record = $this->oneSelect($table, $fields, $where_clause);
         if(is_null($record)) { //insert
@@ -184,11 +196,12 @@ class DB
         }
     }
 
-    public function increase(string $table, array $fields, string $where_clause): ?bool
+    public function increase(string $table, array $fields, array $counter_fields, array $where_clause): ?bool
     {
         $record = $this->oneSelect($table, $fields, $where_clause);
+
         if(is_null($record)) { //insert
-            return $this->insert($table, $fields, str_split(str_repeat('1',count($fields))));
+            return $this->insert($table, array_merge( array_combine($counter_fields, str_split(str_repeat('1',count($fields)))),$where_clause ))  ;
         }
         else{ //update
             $values = [];
@@ -198,4 +211,5 @@ class DB
             return $this->update($table, $fields, $values, $where_clause);
         }
     }
+
 }
