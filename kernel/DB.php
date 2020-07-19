@@ -108,7 +108,7 @@ class DB
     }
 
 
-    public function drop_table(string $table): void
+    public function drop_table(string $table): ?bool
     {
         $sql = "DROP TABLE IF EXISTS $table;";
         $this->connection->query($sql);
