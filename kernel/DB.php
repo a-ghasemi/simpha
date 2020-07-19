@@ -184,4 +184,18 @@ class DB
         }
     }
 
+    public function increase(string $table, array $fields, string $where_clause): ?bool
+    {
+        $record = $this->oneSelect($table, $fields, $where_clause);
+        if(is_null($record)) { //insert
+            return $this->insert($table, $fields, str_split(str_repeat('1',count($fields))));
+        }
+        else{ //update
+            $values = [];
+            foreach($fields as $field){
+                $values[$field] = ((int) $record[$field]) + 1;
+            }
+            return $this->update($table, $fields, $values, $where_clause);
+        }
+    }
 }
