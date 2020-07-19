@@ -49,11 +49,22 @@ class Migration
 
         return $query_string;
     }
+    function integer($name, $length = 10){
+        $query_string = "`$name` INT($length)";
+
+        return $query_string;
+    }
     function string($name, $length = 255){
         $query_string = "`$name` VARCHAR($length)";
 
         return $query_string;
     }
+    function text($name){
+        $query_string = "`$name` TEXT";
+
+        return $query_string;
+    }
+
     function timestamp($name, $default = 'CURRENT_TIMESTAMP', $on_update = 'CURRENT_TIMESTAMP'){
         $query_string = "`$name` TIMESTAMP DEFAULT $default ON UPDATE $on_update";
 
