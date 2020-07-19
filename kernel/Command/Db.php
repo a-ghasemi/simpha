@@ -38,6 +38,20 @@ class Db extends Command
 
     }
 
+    public function rollback()
+    {
+        $namespace = 'App\\database\\migrations';
+        $migration_classes = ClassMap::map($namespace, app_path('database/migrations'));
+        $migration_classes = array_reverse($migration_classes);
+        foreach ($migration_classes as $class => $methods) {
+            $obj = $namespace . "\\" . $class;
+            $obj = new $obj;
+            $obj->down();
+            $this->comment("Table [$class] Dropped Successfully.");
+        }
+
+    }
+
     private function connectDatabase($user, $pass, $db_name, $host = 'localhost', $port = '3306')
     {
         $this->database = new \Kernel\DB($host, $port, $user, $pass, $db_name);
