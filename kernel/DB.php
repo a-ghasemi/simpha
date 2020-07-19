@@ -147,16 +147,16 @@ class DB
         return true;
     }
 
-    public function insert(string $table, array $fields, array $values): void
+    public function insert(string $table, array $fields, array $values): ?bool
     {
         $sql = "INSERT INTO `$table`" .
             " (`" . implode('`,`', $fields) . "`)" .
             " VALUES ('" . implode("','", $values) . "');";
         $this->connection->query($sql);
-        echo "One record created successfully\n";
+        return true; // TODO: return insert_id
     }
 
-    public function update(string $table, array $fields, array $values, string $select): bool
+    public function update(string $table, array $fields, array $values, string $where_clause): ?bool
     {
         $data = array_combine($fields,$values);
         $content = [];
@@ -167,13 +167,21 @@ class DB
 
         $sql = "UPDATE `$table`" .
             " SET $content" .
-            " WHERE $select;" ;
+            " WHERE $where_clause;" ;
         $this->connection->query($sql);
         return true;
     }
 
+    # TODO: where_clause must be associative array, to check field in insert or update
+    public function insertOrUpdate(string $table, array $fields, array $values, string $where_clause): ?bool
+    {
+        $record = $this->oneSelect($table, $fields, $where_clause);
+        if(is_null($record)) { //insert
+            return $this->insert($table, $fields, $values);
+        }
+        else{ //update
+            return $this->update($table, $fields, $values, $where_clause);
+        }
+    }
 
-
-
-    
 }
