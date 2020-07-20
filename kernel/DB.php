@@ -119,7 +119,7 @@ class DB
 
         $w_str = [];
         foreach($where_clause as $field => $val){
-            $w_str[] = "`$field` = $val";
+            $w_str[] = "`$field` = '$val'";
         }
         $w_str = implode(" AND ", $w_str);
 
@@ -174,7 +174,7 @@ class DB
 
         $w_str = [];
         foreach($where_clause as $field => $val){
-            $w_str[] = "`$field` = $val";
+            $w_str[] = "`$field` = '$val'";
         }
         $w_str = implode(" AND ", $w_str);
 
@@ -189,7 +189,7 @@ class DB
     {
         $record = $this->oneSelect($table, $fields, $where_clause);
         if(is_null($record)) { //insert
-            return $this->insert($table, $fields, $values);
+            return $this->insert($table, array_combine($fields, $values));
         }
         else{ //update
             return $this->update($table, $fields, $values, $where_clause);
