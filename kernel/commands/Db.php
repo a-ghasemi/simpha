@@ -30,12 +30,21 @@ class Db extends Command
             $obj = $namespace . "\\" . $class;
             $obj = new $obj;
             $obj->up();
-
-            # TODO: Create regex to remove CREATE####TABLE around $class
-
             $this->comment("Table [$class] Created Successfully.");
         }
 
+    }
+
+    public function seed()
+    {
+        $namespace = 'App\\database\\seeds';
+        $seed_classes = ClassMap::map($namespace, app_path('database/seeds'));
+        foreach ($seed_classes as $class => $methods) {
+            $obj = $namespace . "\\" . $class;
+            $obj = new $obj;
+            $obj->run();
+            $this->comment("Seed [$class] Executed Successfully.");
+        }
     }
 
     public function rollback()
