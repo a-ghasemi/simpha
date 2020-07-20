@@ -196,19 +196,19 @@ class DB
         }
     }
 
-    public function increase(string $table, array $fields, array $counter_fields, array $where_clause): ?bool
+    public function increase(string $table, array $counter_fields, array $where_clause): ?bool
     {
-        $record = $this->oneSelect($table, $fields, $where_clause);
+        $record = $this->oneSelect($table, $counter_fields, $where_clause);
 
         if(is_null($record)) { //insert
-            return $this->insert($table, array_merge( array_combine($counter_fields, str_split(str_repeat('1',count($fields)))),$where_clause ))  ;
+            return $this->insert($table, array_merge( array_combine($counter_fields, str_split(str_repeat('1',count($counter_fields)))),$where_clause ))  ;
         }
         else{ //update
             $values = [];
-            foreach($fields as $field){
+            foreach($counter_fields as $field){
                 $values[$field] = ((int) $record[$field]) + 1;
             }
-            return $this->update($table, $fields, $values, $where_clause);
+            return $this->update($table, $counter_fields, $values, $where_clause);
         }
     }
 
