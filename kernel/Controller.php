@@ -6,10 +6,12 @@ namespace Kernel;
 class Controller
 {
     protected $data;
+    protected $db;
 
-    public function __construct($data = null)
+    public function __construct($data = null,$database = null)
     {
         $this->data = $data;
+        $this->db = $database;
     }
 
     final public function run(){

@@ -15,6 +15,7 @@ class Kernel
 
     public function __construct($debug_mode = false)
     {
+        @session_start();
         Self::$env = (new EnvParser(base_path(".env")))->parse();
 
         $this->connectDatabase(
@@ -63,7 +64,8 @@ class Kernel
             header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found", true, 404);
             return;
         }
-        $page = new $controller($this->data);
+
+        $page = new $controller($this->data, $this->database);
         $ret = $page->run();
 
         if (is_object($ret)) {

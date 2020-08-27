@@ -35,10 +35,12 @@ class Db extends Command
 
     }
 
-    public function seed()
+    public function seed():void
     {
-        $namespace = 'App\\database\\seeds';
-        $seed_classes = ClassMap::map($namespace, app_path('database/seeds'));
+        $folder = $this->parameters[0] ?? '';
+
+        $namespace = 'App\\database\\seeds'.($folder?"\\$folder":"");
+        $seed_classes = ClassMap::map($namespace, app_path('database/seeds/'.$folder));
         foreach ($seed_classes as $class => $methods) {
             $obj = $namespace . "\\" . $class;
             $obj = new $obj;
@@ -59,6 +61,12 @@ class Db extends Command
             $this->comment("Table [$class] Dropped Successfully.");
         }
 
+    }
+
+    public function renew(){
+        $this->rollback();
+        $this->migrate();
+        $this->seed();
     }
 
     private function connectDatabase($user, $pass, $db_name, $host = 'localhost', $port = '3306')
