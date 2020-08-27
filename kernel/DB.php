@@ -137,6 +137,10 @@ class DB
         }
     }
 
+    public function raw(string $sql){
+        return $this->connection->query($sql);
+    }
+
 
     public function drop_table(string $table): ?bool
     {
@@ -209,6 +213,28 @@ class DB
                 $values[$field] = ((int) $record[$field]) + 1;
             }
             return $this->update($table, $counter_fields, $values, $where_clause);
+        }
+    }
+
+    public function has_table(string $table): ?bool
+    {
+        $result = $this->raw("SHOW TABLES LIKE '$table';");
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public function show_tables_like(string $table): ?string
+    {
+        $result = $this->raw("SHOW TABLES LIKE '$table???';");
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+        else {
+            return null;
         }
     }
 

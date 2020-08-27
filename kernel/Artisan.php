@@ -55,8 +55,8 @@ class Artisan
         if($this->debug) dump($this->command,$this->subcommands,$this->parameters);
         print("=================\n");
 
-        $system_classes = ClassMap::map('Kernel\\Command',kernel_path('commands'));
-        $user_classes = ClassMap::map('App\\Command',app_path('commands'));
+        $system_classes = ClassMap::map('Kernel\\Command',kernel_path('Command'));
+        $user_classes = ClassMap::map('App\\Command',app_path('Command'));
 
         print("System Commands\n");
         foreach($system_classes as $class=>$methods){
