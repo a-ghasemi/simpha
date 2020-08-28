@@ -228,13 +228,36 @@ class DB
 
     public function show_tables_like(string $table): ?string
     {
-        $result = $this->raw("SHOW TABLES LIKE '$table???';");
+        $query_string = $table;
+        do{
+            $result = $this->raw("SHOW TABLES LIKE '$query_string';");
+            $query_string .= '_';
+        }while($result->num_rows <= 0);
+
         if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
+            $result = $result->fetch_assoc();
+            $result = array_values($result)[0];
+            return $result;
         }
         else {
             return null;
         }
+    }
+
+    public function get_table_columns(string $table): ?array
+    {
+        $columns = [];
+        $result = $this->raw("SHOW COLUMNS FROM `$table`;");
+        if ($result->num_rows > 0)
+            while($res = $result->fetch_assoc()){
+            $columns[$res['Field']] = array_filter($res,function($k) use ($res){
+                return $k != $res['Field'];
+            });
+        }
+        else {
+            return null;
+        }
+        return $columns;
     }
 
 }

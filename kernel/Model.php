@@ -9,9 +9,11 @@ abstract class Model
     private $namespace;
     private $class_name;
     private $identity_field = 'id';
+
     private $tmp_data;
 
     protected $table_name = '';
+    protected $all_columns = [];
     protected $fillables = [];
 
     public function __construct()
@@ -28,16 +30,16 @@ abstract class Model
             die("Database Connection Failed!");
         }
 
-        $this->namespace = __NAMESPACE__;
-        $this->class_name = __CLASS__;
-        stack($this->namespace);
-        dd($this->class_name);
-        $tables = $this->database->show_tables_like(strtolower($this->class_name));
-        if (count($tables)) {
-            $this->table_name = $tables[0];
+        $this->class_name = last(explode('\\',get_class($this)));
+
+        $table = $this->database->show_tables_like(strtolower($this->class_name));
+        if ($table) {
+            $this->table_name = $table;
         } else {
             die("Table of {$this->class_name} not found!");
         }
+
+        $this->all_columns = $this->database->get_table_columns($this->table_name);
     }
 
     public static function find(): ?object
