@@ -55,8 +55,9 @@ abstract class Model
     public function info():?array
     {
         return [
+            'class' => $this->class_name,
             'table' => $this->table_name,
-            'fields' => array_keys($this->tmp_data),
+            'fields' => $this->all_columns,
         ];
     }
 
