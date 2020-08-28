@@ -9,12 +9,15 @@ function global_errors($key = null)
 
 function env_get($key, $default = null)
 {
-    return \Kernel\Kernel::$env[$key] ?? \Kernel\Artisan::$env[$key] ?? $default;
+    $ret = \Kernel\Kernel::$env[$key] ?? \Kernel\Artisan::$env[$key] ?? $default;
+    if($ret === 'true') $ret = true;
+    if($ret === 'false') $ret = false;
+    return $ret;
 }
 
-function view($blade_path)
+function view($blade_path, $data = [])
 {
-    return \Kernel\View::show($blade_path);
+    return \Kernel\View::show($blade_path,$data);
 }
 
 function redirect($target, $status_code = 200)
@@ -44,6 +47,12 @@ function app_path($dir = '')
 
 if (!function_exists('dump')) {
     function dump()
+    {
+        foreach (func_get_args() as $arg) var_dump($arg);
+    }
+}
+if (!function_exists('stack')) {
+    function stack()
     {
         foreach (func_get_args() as $arg) var_dump($arg);
     }

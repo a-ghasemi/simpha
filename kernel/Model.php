@@ -6,6 +6,7 @@ namespace Kernel;
 abstract class Model
 {
     private $database;
+    private $namespace;
     private $class_name;
     private $identity_field = 'id';
     private $tmp_data;
@@ -27,7 +28,10 @@ abstract class Model
             die("Database Connection Failed!");
         }
 
-        $this->class_name = STATIC::__CLASS__;
+        $this->namespace = __NAMESPACE__;
+        $this->class_name = __CLASS__;
+        stack($this->namespace);
+        dd($this->class_name);
         $tables = $this->database->show_tables_like(strtolower($this->class_name));
         if (count($tables)) {
             $this->table_name = $tables[0];
@@ -36,13 +40,31 @@ abstract class Model
         }
     }
 
+    public static function find(): ?object
+    {
+
+    }
+
+    public function create():?int
+    {
+
+    }
+
+    public function info():?array
+    {
+        return [
+            'table' => $this->table_name,
+            'fields' => array_keys($this->tmp_data),
+        ];
+    }
+
     public function save()
     {
         $this->database->insertOrUpdate(
             $this->table_name,
             $this->fillables,
             array_values($this->tmp_data),
-            "`{$this->identity_field}` = '" .$this->tmp_data[$this->identity_field]. "'"
+            "`{$this->identity_field}` = '" . $this->tmp_data[$this->identity_field] . "'"
         );
 
     }

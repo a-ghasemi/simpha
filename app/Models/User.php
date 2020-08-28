@@ -7,5 +7,5 @@ use Kernel\Model;
 
 class User extends Model
 {
-    protected $fillable = [];
+    protected $fillable = ['username', 'password'];
 }
