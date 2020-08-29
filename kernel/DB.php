@@ -92,9 +92,10 @@ class DB
         return true;
     }
 
-    public function Select(string $table, array $fields, string $where_clause){
-        $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
-        $content = !empty($fields) ? "`$content`" : $content ;
+    public function Select(string $table, ?array $fields, $where_clause){
+        $content = !empty($fields) ? '`'.implode('`,`', $fields).'`' : '*' ;
+
+        if(is_array($where_clause)) $where_clause = $this->stringifyWhereClause($where_clause);
 
         $sql = "SELECT $content" .
             " FROM $table" .
@@ -104,18 +105,17 @@ class DB
 
         if ($result->num_rows > 0) {
             // output data of each row
-            while($row = $result->fetch_assoc()) {
-                yield $row;
-            }
+            return $result->fetch_all();
         }
         else {
             return null;
         }
     }
 
-    public function gSelect(string $table, array $fields, string $where_clause){
-        $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
-        $content = !empty($fields) ? "`$content`" : $content ;
+    public function gSelect(string $table, ?array $fields, $where_clause){
+        $content = !empty($fields) ? '`'.implode('`,`', $fields).'`' : '*' ;
+
+        if(is_array($where_clause)) $where_clause = $this->stringifyWhereClause($where_clause);
 
         $sql = "SELECT $content" .
             " FROM $table" .
@@ -134,19 +134,23 @@ class DB
         }
     }
 
-    public function oneSelect(string $table, array $fields, array $where_clause){
-        $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
-        $content = !empty($fields) ? "`$content`" : $content ;
-
+    private function stringifyWhereClause($where_clause){
         $w_str = [];
         foreach($where_clause as $field => $val){
             $w_str[] = "`$field` = '$val'";
         }
         $w_str = implode(" AND ", $w_str);
+        return $w_str;
+    }
+
+    public function oneSelect(string $table, ?array $fields, $where_clause){
+        $content = !empty($fields) ? '`'.implode('`,`', $fields).'`' : '*' ;
+
+        if(is_array($where_clause)) $where_clause = $this->stringifyWhereClause($where_clause);
 
         $sql = "SELECT $content" .
             " FROM $table" .
-            " WHERE $w_str LIMIT 1;" ;
+            " WHERE $where_clause LIMIT 1;" ;
 
         $result = $this->connection->query($sql);
 
@@ -184,43 +188,38 @@ class DB
             " VALUES ('" . implode("','", array_values($fields)) . "');";
 
         $this->connection->query($sql);
-        return true; // TODO: return insert_id
+        return $this->connection->insert_id;
     }
 
-    public function update(string $table, array $fields, array $values, array $where_clause): ?bool
+    public function update(string $table, array $fields, $where_clause): ?bool
     {
-        $data = array_combine($fields,$values);
         $content = [];
-        foreach ($data as $key => $val) {
+        foreach ($fields as $key => $val) {
             $content[] = "`$key` = '$val'";
         }
         $content = implode(',', $content);
 
-        $w_str = [];
-        foreach($where_clause as $field => $val){
-            $w_str[] = "`$field` = '$val'";
-        }
-        $w_str = implode(" AND ", $w_str);
+        if(is_array($where_clause)) $where_clause = $this->stringifyWhereClause($where_clause);
 
         $sql = "UPDATE `$table`" .
             " SET $content" .
-            " WHERE $w_str;" ;
+            " WHERE $where_clause;" ;
         $this->connection->query($sql);
         return true;
     }
 
-    public function insertOrUpdate(string $table, array $fields, array $values, array $where_clause): ?bool
+    public function insertOrUpdate(string $table, array $fields, $where_clause): ?bool
     {
         $record = $this->oneSelect($table, $fields, $where_clause);
         if(is_null($record)) { //insert
-            return $this->insert($table, array_combine($fields, $values));
+            return $this->insert($table, $fields);
         }
         else{ //update
-            return $this->update($table, $fields, $values, $where_clause);
+            return $this->update($table, $fields, $where_clause);
         }
     }
 
-    public function increase(string $table, array $counter_fields, array $where_clause): ?bool
+    public function increase(string $table, array $counter_fields, $where_clause): ?bool
     {
         $record = $this->oneSelect($table, $counter_fields, $where_clause);
 
@@ -232,7 +231,7 @@ class DB
             foreach($counter_fields as $field){
                 $values[$field] = ((int) $record[$field]) + 1;
             }
-            return $this->update($table, $counter_fields, $values, $where_clause);
+            return $this->update($table, $counter_fields, $where_clause);
         }
     }
 

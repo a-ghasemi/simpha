@@ -5,75 +5,89 @@ namespace Kernel;
 
 abstract class Model
 {
-    private $database;
-    private $class_name;
+    protected static $database;
+    protected static $class_name;
 
     private $tmp_data;
 
-    protected $table = '';
-    protected $all_columns = [];
-    protected $primaryKey = 'id';
+    protected static $table;
+    protected static $all_columns = [];
+    protected static $primaryKey = 'id';
 
-    protected $fillables = [];
+    protected static $fillables = [];
 
-    public function __construct()
+    private static function connect()
     {
-        $this->database = new DB(
+        static::$database = new DB(
             env_get('DB_HOST', 'localhost'),
             env_get('DB_PORT', 3306),
             env_get('DB_USER'),
             env_get('DB_PASS'),
             env_get('DB_NAME'),
         );
-        $this->database->connect();
-        if ($this->database->error) {
+        static::$database->connect();
+        if (static::$database->error) {
             die("Database Connection Failed!");
         }
 
-        $this->class_name = last(explode('\\', get_class($this)));
+        static::$class_name = last(explode('\\', get_class(new static)));
 
-        $table = $this->database->show_tables_like(strtolower($this->class_name));
+        $table = static::$database->show_tables_like(strtolower(static::$class_name));
         if ($table) {
-            $this->table = $table;
+            static::$table = $table;
         } else {
-            die("Table of {$this->class_name} not found!");
+            die("Table of " . static::$class_name . " not found!");
         }
 
-        $this->all_columns = $this->database->get_table_columns($this->table);
+        static::$all_columns = static::$database->get_table_columns(static::$table);
     }
 
-    public static function find(): ?object
+    public static function find($primaryKey): ?array
     {
+        if(is_null(static::$database)) static::connect();
+
+        return static::$database->oneSelect(static::$table, null, [static::$primaryKey => $primaryKey]);
+    }
+
+    public static function create($data): ?int
+    {
+        if(is_null(static::$database)) static::connect();
+
+        return static::$database->insert(
+            static::$table,
+            $data,
+            false
+        );
 
     }
 
-    public function create(): ?int
+    public static function info(): ?array
     {
-
-    }
-
-    public function info(): ?array
-    {
+        if(is_null(static::$database)) static::connect();
         return [
-            'class' => $this->class_name,
-            'table' => $this->table,
-            'fields' => $this->all_columns,
+            'class' => static::$class_name,
+            'table' => static::$table,
+            'fields' => static::$all_columns,
         ];
     }
 
     public function save()
     {
-        $this->database->insertOrUpdate(
-            $this->table,
-            $this->fillables,
+        static::$database->insertOrUpdate(
+            static::$table,
+            static::$fillables,
             array_values($this->tmp_data),
-            "`{$this->primaryKey}` = '" . $this->tmp_data[$this->primaryKey] . "'"
+            sprintf("`%s` = '%s'",static::$primaryKey,$this->tmp_data[static::$primaryKey]),
         );
     }
 
     public static function all()
     {
-
+        if(is_null(static::$database)) static::connect();
+        return static::$database->Select(static::$table, null, true);
     }
+
+
+
 
 }
