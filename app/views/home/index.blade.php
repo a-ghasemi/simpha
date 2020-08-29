@@ -85,7 +85,7 @@
             <div class="content">
                 <div class="title m-b-md">
                     SimPha
-                    <span class="headline m-b-md">v0.9</span>
+                    <span class="headline m-b-md">v1.0</span>
                     <div class="desc">Simple MVC framework on PHP7</div>
                 </div>
 

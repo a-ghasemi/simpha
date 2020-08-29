@@ -76,7 +76,7 @@
     <div class="content">
         <div class="title m-b-md">
             SimPha Admin Panel
-            <span class="headline m-b-md">v0.6</span>
+            <span class="headline m-b-md">v0.8</span>
             <div class="desc">Simple MVC framework on PHP7</div>
         </div>
 
