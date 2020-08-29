@@ -92,6 +92,27 @@ class DB
         return true;
     }
 
+    public function Select(string $table, array $fields, string $where_clause){
+        $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
+        $content = !empty($fields) ? "`$content`" : $content ;
+
+        $sql = "SELECT $content" .
+            " FROM $table" .
+            " WHERE $where_clause;" ;
+
+        $result = $this->connection->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                yield $row;
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
     public function gSelect(string $table, array $fields, string $where_clause){
         $content = !empty($fields) ? implode('`,`', $fields) : '*' ;
         $content = !empty($fields) ? "`$content`" : $content ;
