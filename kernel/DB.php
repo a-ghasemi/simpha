@@ -98,14 +98,14 @@ class DB
         if(is_array($where_clause)) $where_clause = $this->stringifyWhereClause($where_clause);
 
         $sql = "SELECT $content" .
-            " FROM $table" .
+            " FROM `$table`" .
             " WHERE $where_clause;" ;
 
         $result = $this->connection->query($sql);
 
         if ($result->num_rows > 0) {
             // output data of each row
-            return $result->fetch_all();
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
         else {
             return null;
@@ -148,7 +148,7 @@ class DB
 
         if(is_array($where_clause)) $where_clause = $this->stringifyWhereClause($where_clause);
 
-        $sql = "SELECT $content" .
+        $sql = "SELECT *" .
             " FROM $table" .
             " WHERE $where_clause LIMIT 1;" ;
 

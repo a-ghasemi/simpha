@@ -6,15 +6,26 @@ namespace Kernel;
 abstract class Model
 {
     protected static $database;
-    protected static $class_name;
+    protected static string $class_name;
 
-    private $tmp_data;
+    private array $tmp_data = [];
+    private array $query = [
+        'fields'=> [],
+        'where_clause'=> [],
+    ];
 
-    protected static $table;
-    protected static $all_columns = [];
-    protected static $primaryKey = 'id';
+    protected static string $table;
+    protected static array $all_columns = [];
+    protected static string $primaryKey = 'id';
 
-    protected static $fillables = [];
+    protected static array $fillables = [];
+
+    public function __construct()
+    {
+        foreach(static::$all_columns as $col => $inside){
+            $this->tmp_data[$col] = null;
+        }
+    }
 
     private static function connect()
     {
@@ -42,11 +53,33 @@ abstract class Model
         static::$all_columns = static::$database->get_table_columns(static::$table);
     }
 
-    public static function find($primaryKey): ?array
+    public function __get($name)
+    {
+        if(isset($this->tmp_data[$name]))
+            return $this->tmp_data[$name];
+        else
+            throw new Exception("$name dow not exists");
+    }
+
+    public function __set($name, $value)
+    {
+        if(isset($this->tmp_data[$name]))
+            $this->tmp_data[$name] = $value;
+        else
+            throw new Exception("$name dow not exists");
+    }
+
+    public static function find($primaryKey): ?object
     {
         if(is_null(static::$database)) static::connect();
 
-        return static::$database->oneSelect(static::$table, null, [static::$primaryKey => $primaryKey]);
+        $result = static::$database->oneSelect(static::$table, null, [static::$primaryKey => $primaryKey]);
+
+        if(is_null($result)) return null;
+
+        $obj = new static;
+        $obj->tmp_data = $result;
+        return $obj;
     }
 
     public static function create($data): ?int
@@ -75,8 +108,16 @@ abstract class Model
     {
         static::$database->insertOrUpdate(
             static::$table,
-            static::$fillables,
-            array_values($this->tmp_data),
+            $this->tmp_data,
+            [static::$primaryKey=>$this->tmp_data[static::$primaryKey]],
+        );
+    }
+
+    public function update()
+    {
+        static::$database->update(
+            static::$table,
+            $this->tmp_data,
             sprintf("`%s` = '%s'",static::$primaryKey,$this->tmp_data[static::$primaryKey]),
         );
     }
@@ -87,7 +128,47 @@ abstract class Model
         return static::$database->Select(static::$table, null, true);
     }
 
+    /**
+     * @return mixed
+     */
+    public static function instance()
+    {
+        if(is_null(static::$database)) static::connect();
+        return (new static);
+    }
 
+    public function where(array $where_clause){
+        $this->query['where_clause'][] = $where_clause;
+        return $this;
+    }
+
+    public function get(?array $fields = null){
+        $this->query['fields'] = $fields;
+
+        $where_clause = [];
+        foreach($this->query['where_clause'] as $inside)
+            $where_clause = array_merge_recursive($where_clause,$inside);
+
+        return static::$database->Select(
+            static::$table,
+            $this->query['fields'],
+            $where_clause
+        );
+    }
+
+    public function first(?array $fields = null){
+        $this->query['fields'] = $fields;
+
+        $where_clause = [];
+        foreach($this->query['where_clause'] as $inside)
+            $where_clause = array_merge_recursive($where_clause,$inside);
+
+        return static::$database->oneSelect(
+            static::$table,
+            $this->query['fields'],
+            $where_clause
+        );
+    }
 
 
 }

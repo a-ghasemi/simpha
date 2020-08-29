@@ -15,7 +15,10 @@ class AdminController extends Controller
 
     protected function get_test()
     {
-        $data = User::find(1);
-        return view("admin.test",['data' => $data['username']]);
+        $data = User::instance()->where(['username' => '123'])->first();
+//        $data->username = '123';
+//        $data->save();
+        dd($data);
+        return view("admin.test",['data' => $data->password]);
     }
 }

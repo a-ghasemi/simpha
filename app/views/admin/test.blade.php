@@ -9,8 +9,6 @@
 </head>
 <body>
 This is a test <br/>
-{{$data}}
 {!! $data !!}
-{{{$data}}}
 </body>
 </html>
