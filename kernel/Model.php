@@ -7,18 +7,19 @@ use Exception;
 abstract class Model
 {
     protected static $database;
-protected static string $class_name;
+    protected static string $class_name;
 
-private array $tmp_data = [];
-private array $query = ['fields' => [],
-'where_clause' => [],
-'where_like_clause' => [],];
+    private array $tmp_data = [];
+    private array $query = ['fields' => [],
+        'where_clause' => [],
+        'where_like_clause' => [],
+    ];
 
-protected static string $table;
-protected static array $all_columns = [];
-protected static string $primaryKey = 'id';
+    protected static string $table;
+    protected static array $all_columns = [];
+    protected static string $primaryKey = 'id';
 
-protected static array $fillables = [];
+    protected static array $fillables = [];
 
     public function __construct()
     {
@@ -35,7 +36,7 @@ protected static array $fillables = [];
             env_get('DB_USER'),
             env_get('DB_PASS'),
             env_get('DB_NAME'),
-            );
+        );
         static::$database->connect();
         if (static::$database->error) {
             die("Database Connection Failed!");
@@ -98,8 +99,8 @@ protected static array $fillables = [];
     {
         if (is_null(static::$database)) static::connect();
         return [
-            'class'  => static::$class_name,
-            'table'  => static::$table,
+            'class' => static::$class_name,
+            'table' => static::$table,
             'fields' => static::$all_columns,
         ];
     }
@@ -110,7 +111,7 @@ protected static array $fillables = [];
             static::$table,
             $this->tmp_data,
             [static::$primaryKey => $this->tmp_data[static::$primaryKey]],
-            );
+        );
     }
 
     public function update()
@@ -119,13 +120,27 @@ protected static array $fillables = [];
             static::$table,
             $this->tmp_data,
             sprintf("`%s` = '%s'", static::$primaryKey, $this->tmp_data[static::$primaryKey]),
-            );
+        );
     }
 
     public static function all()
     {
         if (is_null(static::$database)) static::connect();
-        return static::$database->Select(static::$table, null, true);
+        $items = static::$database->gSelect(
+            static::$table,
+            null,
+            true
+        );
+
+        $ret = [];
+        foreach ($items as $item) {
+            $obj = new static;
+            foreach ($item as $key => $val)
+                $obj->{$key} = $val;
+            $ret[] = $obj;
+        }
+
+        return $ret;
     }
 
     /**
@@ -166,7 +181,7 @@ protected static array $fillables = [];
             $this->query['fields'],
             $where_clause,
             $where_like_clause,
-            );
+        );
 
         $ret = [];
         foreach ($items as $item) {
