@@ -211,4 +211,16 @@ abstract class Model
     }
 
 
+    public static function __callStatic($name, $arguments)
+    {
+        switch($name){
+            case 'where':
+                $obj = new static;
+                return $obj->where($arguments);
+                break;
+            default:
+                throw new Exception('Static Function not found');
+
+        }
+    }
 }
