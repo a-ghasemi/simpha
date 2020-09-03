@@ -13,12 +13,14 @@ class EnvParser
         $this->env_address = $env_path;
     }
 
-    public function parse(){
+    public function parse()
+    {
         $content = file_get_contents($this->env_address);
         $content = explode("\n", $content);
-        foreach($content as $line){
-            if(empty($line))continue;
-            $data = explode("=",$line);
+        foreach ($content as $line) {
+            if (empty($line)) continue;
+            $data = explode("=", $line);
+            if (count($data) != 2) continue;
             $this->env_data[trim($data[0])] = trim($data[1]);
         }
 
