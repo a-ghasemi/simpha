@@ -144,15 +144,15 @@ abstract class Model
         return $ret;
     }
 
-    public function where(array $where_clause)
+    private function whereFunc(array $where_clause)
     {
-        $this->query['where_clause'][] = $where_clause;
+        $this->query['where_clause'] = array_merge_recursive($this->query['where_clause'], $where_clause);
         return $this;
     }
 
     public function whereLike(array $where_clause)
     {
-        $this->query['where_like_clause'][] = $where_clause;
+        $this->query['where_like_clause'] = array_merge_recursive($this->query['where_like_clause'], $where_clause);
         return $this;
     }
 
@@ -203,16 +203,32 @@ abstract class Model
     }
 
 
+    public function __call($name, $arguments)
+    {
+        switch($name){
+            case 'where':
+                $obj = new static;
+                return $obj->whereFunc($arguments);
+                break;
+            default:
+                throw new Exception('Function not found');
+
+        }
+    }
+
     public static function __callStatic($name, $arguments)
     {
         switch($name){
             case 'where':
                 $obj = new static;
-                return $obj->where($arguments);
+                return $obj->whereFunc($arguments);
                 break;
             default:
                 throw new Exception('Static Function not found');
 
         }
+
+
     }
+
 }
