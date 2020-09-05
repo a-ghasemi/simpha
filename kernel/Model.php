@@ -13,6 +13,7 @@ abstract class Model
     private array $query = ['fields' => [],
         'where_clause' => [],
         'where_like_clause' => [],
+        'or_where_clause' => [],
     ];
 
     protected static string $table;
@@ -143,18 +144,15 @@ abstract class Model
         return $ret;
     }
 
-    /**
-     * @return mixed
-     */
-    public static function instance()
-    {
-        if (is_null(static::$database)) static::connect();
-        return (new static);
-    }
-
     public function where(array $where_clause)
     {
         $this->query['where_clause'][] = $where_clause;
+        return $this;
+    }
+
+    public function orWhere(array $where_clause)
+    {
+        $this->query['or_where_clause'][] = $where_clause;
         return $this;
     }
 
@@ -168,19 +166,10 @@ abstract class Model
     {
         $this->query['fields'] = $fields;
 
-        $where_clause = [];
-        foreach ($this->query['where_clause'] as $inside)
-            $where_clause = array_merge_recursive($where_clause, $inside);
-
-        $where_like_clause = [];
-        foreach ($this->query['where_clause'] as $inside)
-            $where_like_clause = array_merge_recursive($where_like_clause, $inside);
-
         $items = static::$database->gSelect(
             static::$table,
             $this->query['fields'],
-            $where_clause,
-            $where_like_clause,
+            $this->whereClauseCombiner(),
         );
 
         $ret = [];
@@ -198,18 +187,29 @@ abstract class Model
     {
         $this->query['fields'] = $fields;
 
-        $where_clause = [];
-        foreach ($this->query['where_clause'] as $inside)
-            $where_clause = array_merge_recursive($where_clause, $inside);
-
         $this->tmp_data = static::$database->oneSelect(
             static::$table,
             $this->query['fields'],
-            $where_clause
+            $this->whereClauseCombiner(),
         );
         return $this;
     }
 
+
+    private function whereClauseCombiner(){
+        $where_clause = [];
+        foreach ($this->query['where_clause'] as $inside)
+            $where_clause = array_merge_recursive($where_clause, $inside);
+
+        $where_like_clause = [];
+        foreach ($this->query['where_like_clause'] as $inside)
+            $where_like_clause = array_merge_recursive($where_like_clause, $inside);
+
+        $where_like_clause = [];
+        foreach ($this->query['where_like_clause'] as $inside)
+            $where_like_clause = array_merge_recursive($where_like_clause, $inside);
+
+    }
 
     public static function __callStatic($name, $arguments)
     {
