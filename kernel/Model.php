@@ -7,7 +7,6 @@ use Exception;
 abstract class Model
 {
     protected static $database;
-    protected static string $class_name;
 
     private array $tmp_data = [];
     private array $query = ['fields' => [],
@@ -15,43 +14,51 @@ abstract class Model
         'where_like_clause' => [],
     ];
 
-    protected static string $table;
-    protected static array $all_columns = [];
-    protected static string $primaryKey = 'id';
+    protected string $class_name;
+    protected string $table = '';
+    protected array $all_columns = [];
+    protected string $primaryKey = 'id';
 
     protected static array $fillables = [];
 
-    public function __construct()
+    public function __construct($inner_call = false)
     {
-        foreach (static::$all_columns as $col => $inside) {
+        $this->setTable();
+        foreach ($this->all_columns as $col => $inside) {
             $this->tmp_data[$col] = '';
         }
     }
 
     private static function connect()
     {
-        static::$database = new DB(
+        self::$database = new DB(
             env_get('DB_HOST', 'localhost'),
             env_get('DB_PORT', 3306),
             env_get('DB_USER'),
             env_get('DB_PASS'),
             env_get('DB_NAME'),
         );
-        static::$database->connect();
-        if (static::$database->error) {
+        self::$database->connect();
+        if (self::$database->error) {
             die("Database Connection Failed!");
         }
+    }
 
-        static::$class_name = last(explode('\\', get_class(new static)));
+    private function setTable()
+    {
+        if (empty(self::$database)) static::connect();
+        $this->class_name = last(explode('\\', get_class($this)));
 
-        $table = static::$database->show_tables_like(strtolower(static::$class_name));
+        $table = self::$database->show_tables_like(strtolower($this->class_name));
         if ($table) {
-            static::$table = $table;
+            $this->table = $table;
         } else {
-            die("Table of " . static::$class_name . " not found!");
+            die("Table of " . $this->class_name . " not found!");
         }
 
-        static::$all_columns = static::$database->get_table_columns(static::$table);
+        $this->all_columns = self::$database->get_table_columns($this->table);
+
+        return $this;
     }
 
     public function __get($name)
@@ -72,62 +79,56 @@ abstract class Model
 
     public static function find($primaryKey): ?object
     {
-        if (is_null(static::$database)) static::connect();
-
-        $result = static::$database->oneSelect(static::$table, null, [static::$primaryKey => $primaryKey]);
-
-        if (is_null($result)) return null;
-
         $obj = new static;
+        $result = self::$database->oneSelect($obj->table, null, [$obj->primaryKey => $primaryKey]);
+        if (is_null($result)) return null;
         $obj->tmp_data = $result;
         return $obj;
     }
 
     public static function create($data): ?int
     {
-        if (is_null(static::$database)) static::connect();
-
-        return static::$database->insert(
-            static::$table,
+        $obj = new static;
+        return self::$database->insert(
+            $obj->table,
             $data,
             false
         );
-
     }
 
     public static function info(): ?array
     {
-        if (is_null(static::$database)) static::connect();
+        $obj = new static;
         return [
-            'class' => static::$class_name,
-            'table' => static::$table,
-            'fields' => static::$all_columns,
+            'class' => $obj->class_name,
+            'table' => $obj->table,
+            'fields' => $obj->all_columns,
         ];
     }
 
     public function save()
     {
-        static::$database->insertOrUpdate(
-            static::$table,
+        self::$database->insertOrUpdate(
+            $this->table,
             $this->tmp_data,
-            [static::$primaryKey => $this->tmp_data[static::$primaryKey]],
+            [$this->primaryKey => $this->tmp_data[$this->primaryKey]],
         );
     }
 
     public function update()
     {
-        static::$database->update(
-            static::$table,
+        self::$database->update(
+            $this->table,
             $this->tmp_data,
-            sprintf("`%s` = '%s'", static::$primaryKey, $this->tmp_data[static::$primaryKey]),
+            sprintf("`%s` = '%s'", $this->primaryKey, $this->tmp_data[$this->primaryKey]),
         );
     }
 
     public static function all()
     {
-        if (is_null(static::$database)) static::connect();
-        $items = static::$database->gSelect(
-            static::$table,
+        $tobj = new static;
+        $items = self::$database->gSelect(
+            $tobj->table,
             null,
             true
         );
@@ -141,15 +142,6 @@ abstract class Model
         }
 
         return $ret;
-    }
-
-    /**
-     * @return mixed
-     */
-    public static function instance()
-    {
-        if (is_null(static::$database)) static::connect();
-        return (new static);
     }
 
     public function where(array $where_clause)
@@ -176,8 +168,8 @@ abstract class Model
         foreach ($this->query['where_clause'] as $inside)
             $where_like_clause = array_merge_recursive($where_like_clause, $inside);
 
-        $items = static::$database->gSelect(
-            static::$table,
+        $items = self::$database->gSelect(
+            $this->table,
             $this->query['fields'],
             $where_clause,
             $where_like_clause,
@@ -202,8 +194,8 @@ abstract class Model
         foreach ($this->query['where_clause'] as $inside)
             $where_clause = array_merge_recursive($where_clause, $inside);
 
-        $this->tmp_data = static::$database->oneSelect(
-            static::$table,
+        $this->tmp_data = self::$database->oneSelect(
+            $this->table,
             $this->query['fields'],
             $where_clause
         );
