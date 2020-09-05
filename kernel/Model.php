@@ -8,15 +8,15 @@ abstract class Model
 {
     protected static $database;
 
-    private array $tmp_data = [];
-    private array $query = ['fields' => [],
+    private ?array $tmp_data = [];
+    private ?array $query = ['fields' => [],
         'where_clause' => [],
         'where_like_clause' => [],
     ];
 
     protected string $class_name;
     protected string $table = '';
-    protected array $all_columns = [];
+    protected ?array $all_columns = [];
     protected string $primaryKey = 'id';
 
     protected static array $fillables = [];
