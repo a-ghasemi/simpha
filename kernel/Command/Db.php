@@ -35,12 +35,26 @@ class Db extends Command
 
     }
 
+    public function info()
+    {
+        $namespace = 'App\\database\\migrations';
+        $migration_classes = ClassMap::map($namespace, app_path('database/migrations'));
+        foreach ($migration_classes as $class => $methods) {
+            $obj = $namespace . "\\" . $class;
+            $obj = new $obj;
+            $obj->up();
+            $this->comment("Table [$class] Created Successfully.");
+        }
+
+    }
+
     public function seed():void
     {
         $folder = $this->parameters[0] ?? '';
 
         $namespace = 'App\\database\\seeds'.($folder?"\\$folder":"");
         $seed_classes = ClassMap::map($namespace, app_path('database/seeds/'.$folder));
+
         foreach ($seed_classes as $class => $methods) {
             $obj = $namespace . "\\" . $class;
             $obj = new $obj;

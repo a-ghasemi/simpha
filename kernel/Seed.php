@@ -5,7 +5,7 @@ namespace Kernel;
 
 use Kernel\DB;
 
-class Seed
+abstract class Seed
 {
     protected $database;
 
@@ -23,5 +23,7 @@ class Seed
             die("Database Connection Failed!");
         }
     }
+
+    public abstract function run();
 
 }

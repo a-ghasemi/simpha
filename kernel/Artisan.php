@@ -10,13 +10,20 @@ class Artisan
     private $parameters;
     static $env;
 
-    private $debug;
-
-    public function __construct($debug = false)
+    public function __construct()
     {
         Self::$env = (new EnvParser(base_path(".env")))->parse();
 
-        $this->debug = $debug;
+        if(env_get('DEBUG_MODE',false)) {
+            ini_set('display_errors',1);
+            ini_set('display_startup_errors',1);
+            error_reporting(E_ALL);
+        }
+        else {
+//            ini_set('display_errors',0);
+//            ini_set('display_startup_errors',0);
+            @error_reporting(0);
+        }
 
         $args = $_SERVER['argv'];
         array_shift($args); //removes "artisan" from the args array

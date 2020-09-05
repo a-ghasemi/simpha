@@ -13,7 +13,7 @@ class Kernel
     static $env;
     static $global_errors;
 
-    public function __construct($debug_mode = false)
+    public function __construct()
     {
         Self::$env = (new EnvParser(base_path(".env")))->parse();
 
@@ -55,8 +55,6 @@ class Kernel
         $this->url['params'] = $url ?? [];
 
         $this->data["url"] = $this->url;
-
-        $this->data['debug_mode'] = $debug_mode;
     }
 
     private function connectDatabase($user, $pass, $db_name, $host = 'localhost', $port = '3306')
