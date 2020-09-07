@@ -163,4 +163,11 @@ class Migration
         return $query_string;
     }
 
+    function point($name)
+    {
+        $query_string = "`$name` POINT";
+
+        return $query_string;
+    }
+
 }
