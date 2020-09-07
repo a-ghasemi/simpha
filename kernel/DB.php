@@ -6,7 +6,7 @@ namespace Kernel;
 class DB
 {
 
-    private $connection;
+    private \mysqli $connection;
 
     private $server_name;
     private $server_port;
@@ -83,10 +83,9 @@ class DB
         if($this->on_demand) return false;
 
         if (!$this->connection->rollback()) {
-//            $this->error = $this->connection->connect_error;
-            $this->error = 'Rollback Transaction failed';
-            $this->state = 'error';
-            return false;
+            if($this->error = $this->connection->error){
+                throw new \Exception($this->error);
+            }
         }
 
         return true;
@@ -122,6 +121,9 @@ class DB
             " WHERE $where_clause LIMIT 1;" ;
 
         $result = $this->connection->query($sql);
+        if($this->error = $this->connection->error){
+            throw new \Exception($this->error);
+        }
 
         if ($result->num_rows > 0) {
             // output data of each row
@@ -163,22 +165,30 @@ class DB
     }
 
     public function raw(string $sql){
-        return $this->connection->query($sql);
+        $ret = $this->connection->query($sql);
+        if($this->error = $this->connection->error){
+            throw new \Exception($this->error);
+        }
+        return $ret;
     }
 
-    public function drop_table(string $table): ?bool
+    public function drop_table(string $table): void
     {
         $sql = "DROP TABLE IF EXISTS $table;";
         $this->connection->query($sql);
-        return true;
+        if($this->error = $this->connection->error){
+            throw new \Exception($this->error);
+        }
     }
 
-    public function create_table(string $table, array $fields): ?bool
+    public function create_table(string $table, array $fields): void
     {
         $sql = "CREATE TABLE IF NOT EXISTS $table " .
             " (" . implode(',', $fields) . ");";
         $this->connection->query($sql);
-        return true;
+        if($this->error = $this->connection->error){
+            throw new \Exception($this->error);
+        }
     }
 
     public function insert(string $table, array $fields): ?bool
@@ -188,6 +198,9 @@ class DB
             " VALUES ('" . implode("','", array_values($fields)) . "');";
 
         $this->connection->query($sql);
+        if($this->error = $this->connection->error){
+            throw new \Exception($this->error);
+        }
         return $this->connection->insert_id;
     }
 
@@ -205,6 +218,9 @@ class DB
             " SET $content" .
             " WHERE $where_clause;" ;
         $this->connection->query($sql);
+        if($this->error = $this->connection->error){
+            throw new \Exception($this->error);
+        }
         return true;
     }
 

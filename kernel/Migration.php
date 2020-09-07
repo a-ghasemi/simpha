@@ -130,20 +130,18 @@ class Migration
         return $query_string;
     }
 
-    function date($name, $default = 'CURRENT_TIMESTAMP', $on_update = 'CURRENT_TIMESTAMP')
+    function date($name, $default = null)
     {
         $query_string = "`$name` DATE ";
         $query_string .= $default ? " DEFAULT $default" : "";
-        $query_string .= $on_update ? " ON UPDATE $on_update" : "";
 
         return $query_string;
     }
 
-    function dateTime($name, $default = 'CURRENT_TIMESTAMP', $on_update = 'CURRENT_TIMESTAMP')
+    function dateTime($name, $default = null)
     {
         $query_string = "`$name` DATETIME ";
         $query_string .= $default ? " DEFAULT $default" : "";
-        $query_string .= $on_update ? " ON UPDATE $on_update" : "";
 
         return $query_string;
     }
