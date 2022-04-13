@@ -5,21 +5,11 @@ namespace Kernel\Abstractions;
 
 abstract class AbsSeed
 {
-    protected $database;
+    protected $db_connection;
 
-    public function __construct()
+    public function __construct(AbsDbConnection $dbConnection)
     {
-        $this->database = new DB(
-            env_get('DB_HOST', 'localhost'),
-            env_get('DB_PORT', 3306),
-            env_get('DB_USER'),
-            env_get('DB_PASS'),
-            env_get('DB_NAME'),
-            );
-        $this->database->connect();
-        if($this->database->error){
-            die("Database Connection Failed!");
-        }
+        $this->db_connection = $dbConnection;
     }
 
     public abstract function run();

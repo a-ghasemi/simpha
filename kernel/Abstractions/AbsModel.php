@@ -72,7 +72,7 @@ abstract class AbsModel
     // Finds a record with its PK
     public static function find($primaryKey): ?object
     {
-        $obj = new static::class;
+        $obj = new static;
         $result = $obj->db_connection->oneSelect($obj->table, null, [$obj->primaryKey => $primaryKey]);
         if (is_null($result)) return null;
         $obj->tmp_data = $result;
@@ -82,7 +82,7 @@ abstract class AbsModel
     // Creates new record on the table
     public static function create($data): ?int
     {
-        $obj = new static::class;
+        $obj = new static;
         return $obj->db_connection->insert(
             $obj->table,
             $data,
@@ -93,7 +93,7 @@ abstract class AbsModel
     // Returns info about current model
     public static function info(): ?array
     {
-        $obj = new static::class;
+        $obj = new static;
         return [
             'class'  => $obj->class_name,
             'table'  => $obj->table,
@@ -121,7 +121,7 @@ abstract class AbsModel
 
     public static function all()
     {
-        $tobj = new static::class;
+        $tobj = new static;
         $items = $tobj->db_connection->generatorSelect(
             $tobj->table,
             null,
@@ -130,7 +130,7 @@ abstract class AbsModel
 
         $ret = [];
         foreach ($items as $item) {
-            $obj = new static::class;
+            $obj = new static;
             foreach ($item as $key => $val)
                 $obj->{$key} = $val;
             $ret[] = $obj;
@@ -171,7 +171,7 @@ abstract class AbsModel
 
         $ret = [];
         foreach ($items as $item) {
-            $obj = new static::class;
+            $obj = new static;
             foreach ($item as $key => $val)
                 $obj->{$key} = $val;
             $ret[] = $obj;
@@ -199,7 +199,7 @@ abstract class AbsModel
 
     public function __call($name, $arguments)
     {
-        $obj = new static::class;
+        $obj = new static;
 
         switch ($name) {
             case 'where':
@@ -214,7 +214,7 @@ abstract class AbsModel
 
     public static function __callStatic($name, $arguments)
     {
-        $obj = new static::class;
+        $obj = new static;
 
         switch ($name) {
             case 'where':

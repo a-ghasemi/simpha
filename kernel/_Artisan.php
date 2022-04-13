@@ -6,17 +6,19 @@ namespace Kernel;
 use Kernel\Abstractions\IDataStorage;
 use Kernel\Abstractions\AbsDbConnection;
 use Kernel\Abstractions\IEnvEngine;
+use Kernel\Abstractions\IErrorHandler;
 
 class _Artisan
 {
     const GLOBAL_NAMESPACE = '\\Kernel\\Command';
     const USER_NAMESPACE = '\\App\\Command';
 
-    public function __construct(AbsDbConnection $dbConnection, IEnvEngine $envEngine, IDataStorage $dataStorage)
+    public function __construct(AbsDbConnection $dbConnection, IEnvEngine $envEngine, IDataStorage $dataStorage, IErrorHandler $errorHandler)
     {
         $this->env_engine = $envEngine;
         $this->db_connection = $dbConnection;
         $this->data_storage = $dataStorage;
+        $this->error_handler = $errorHandler;
 
         $this->getRequestInfo();
     }
@@ -25,8 +27,8 @@ class _Artisan
     {
         $class = $this->getRequestedCommand();
 
-        if($class){
-            $command = new $class($this->data_storage, $this->db_connection);
+        if ($class) {
+            $command = new $class($this->data_storage, $this->db_connection, $this->error_handler);
             $command->run();
         }
     }

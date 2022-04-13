@@ -9,5 +9,5 @@ $dataStorage = new \Kernel\ArrayDataStorage();
 $errorHandler = new \Kernel\ErrorHandler();
 $dbConnection = new \Kernel\MysqlDbConnection($envEngine, $errorHandler);
 
-$artisan = new _Artisan($dbConnection, $envEngine, $dataStorage);
+$artisan = new _Artisan($dbConnection, $envEngine, $dataStorage, $errorHandler);
 $artisan->run();
