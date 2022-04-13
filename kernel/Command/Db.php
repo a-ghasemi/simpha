@@ -3,28 +3,26 @@
 namespace Kernel\Command;
 
 
+use Kernel\Abstractions\AbsCommand;
 use Kernel\Abstractions\AbsDbConnection;
+use Kernel\Abstractions\IDataStorage;
 use Kernel\ClassMap;
-use Kernel\AbsCommand;
 
 class Db extends AbsCommand
 {
-    private $database;
-
     public function check()
     {
-
-
         $this->comment('Database Connection Successfully.');
     }
 
     public function migrate()
     {
-        $namespace = 'App\\database\\migrations';
-        $migration_classes = ClassMap::map($namespace, app_path('database/migrations'));
+        $namespace = 'App\\Database\\Migrations';
+        $migration_classes = ClassMap::map($namespace, app_path('Database/Migrations'));
+
         foreach ($migration_classes as $class => $methods) {
             $obj = $namespace . "\\" . $class;
-            $obj = new $obj;
+            $obj = new $obj($this->db_connection);
             $obj->up();
             $this->comment("Table [$class] Created Successfully.");
         }
@@ -33,27 +31,27 @@ class Db extends AbsCommand
 
     public function info()
     {
-        $namespace = 'App\\database\\migrations';
+        $namespace = 'App\\Database\\Migrations';
         $migration_classes = ClassMap::map($namespace, app_path('database/migrations'));
         foreach ($migration_classes as $class => $methods) {
             $obj = $namespace . "\\" . $class;
-            $obj = new $obj;
+            $obj = new $obj($this->db_connection);
             $obj->up();
             $this->comment("Table [$class] Created Successfully.");
         }
 
     }
 
-    public function seed():void
+    public function seed(): void
     {
         $folder = $this->parameters[0] ?? '';
 
-        $namespace = 'App\\database\\seeds'.($folder?"\\$folder":"");
-        $seed_classes = ClassMap::map($namespace, app_path('database/seeds/'.$folder));
+        $namespace = 'App\\Database\\Seeds' . ($folder ? "\\$folder" : "");
+        $seed_classes = ClassMap::map($namespace, app_path('database/seeds/' . $folder));
 
         foreach ($seed_classes as $class => $methods) {
             $obj = $namespace . "\\" . $class;
-            $obj = new $obj;
+            $obj = new $obj($this->db_connection);
             $obj->run();
             $this->comment("Seed [$class] Executed Successfully.");
         }
@@ -73,7 +71,8 @@ class Db extends AbsCommand
 
     }
 
-    public function renew(){
+    public function renew()
+    {
         $this->rollback();
         $this->migrate();
         $this->seed();

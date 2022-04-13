@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\database\migrations;
+namespace App\Database\Migrations;
 
 
 use Kernel\Abstractions\AbsMigration;
@@ -9,7 +9,7 @@ use Kernel\Abstractions\AbsMigration;
 class CreateUsersTable extends AbsMigration
 {
     public function up(){
-        $this->create_table('users',[
+        $this->create('users',[
             $this->autoincremental('id', 7),
             $this->string('username', 150),
             $this->string('password'),
@@ -18,6 +18,6 @@ class CreateUsersTable extends AbsMigration
     }
 
     public function down(){
-        $this->drop_table('users');
+        $this->drop('users');
     }
 }

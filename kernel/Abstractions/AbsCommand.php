@@ -4,11 +4,13 @@ namespace Kernel\Abstractions;
 
 abstract class AbsCommand
 {
-    protected $data_storage;
+    protected IDataStorage $data_storage;
+    protected AbsDbConnection $db_connection;
 
-    public function __construct(IDataStorage $dataStorage)
+    public function __construct(IDataStorage $dataStorage, AbsDbConnection $dbConnection)
     {
         $this->data_storage = $dataStorage;
+        $this->db_connection = $dbConnection;
     }
 
     final public function run()

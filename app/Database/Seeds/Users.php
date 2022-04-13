@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\database\seeds;
+namespace App\Database\Seeds;
 
 
 use App\Models\User;

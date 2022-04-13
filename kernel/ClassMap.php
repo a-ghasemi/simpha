@@ -19,7 +19,7 @@ class ClassMap
                 $classes = self::fetchDirectory($iterator, $namespace, $item, $classes);
             }
             elseif ($item->isFile() && $item->getExtension() === 'php') {
-                $class = $namespace . '\\' . $item->getBasename('.php');
+                $class = $namespace . "\\" . $item->getBasename('.php');
 
                 // excludes not-class files
                 if (!class_exists($class)) {
@@ -28,7 +28,7 @@ class ClassMap
 
                 $methods = self::fetchMethods($class);
 
-                $class = str_replace($namespace.'\\','',$class);
+                $class = str_replace($namespace . "\\" ,'',$class);
                 $classes[$class] = array_values($methods);
             }
         }

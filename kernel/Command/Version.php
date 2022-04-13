@@ -3,7 +3,7 @@
 namespace Kernel\Command;
 
 
-use Kernel\AbsCommand;
+use Kernel\Abstractions\AbsCommand;
 
 class Version extends AbsCommand
 {

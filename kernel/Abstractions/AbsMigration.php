@@ -3,33 +3,21 @@
 
 namespace Kernel\Abstractions;
 
-use Kernel\DB;
-
 class AbsMigration
 {
-    private $database;
+    protected $db_connection;
 
-    public function __construct()
+    public function __construct(AbsDbConnection $dbConnection)
     {
-        $this->database = new DB(
-            env_get('DB_HOST', 'localhost'),
-            env_get('DB_PORT', 3306),
-            env_get('DB_USER'),
-            env_get('DB_PASS'),
-            env_get('DB_NAME'),
-        );
-        $this->database->connect();
-        if ($this->database->error) {
-            die("Database Connection Failed!");
-        }
+        $this->db_connection = $dbConnection;
     }
 
-    function drop_table($table_name)
+    function drop($table_name)
     {
-        $this->database->drop_table($table_name);
+        $this->db_connection->dropTable($table_name);
     }
 
-    function create_table($table_name, $structure)
+    function create($table_name, $structure)
     {
         $fields = [];
         foreach ($structure as $field) {
@@ -42,7 +30,7 @@ class AbsMigration
             }
         }
 
-        $this->database->create_table($table_name, $fields);
+        $this->db_connection->createTable($table_name, $fields);
     }
 
     function autoincremental($name, $length = 7)

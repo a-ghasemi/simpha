@@ -9,8 +9,8 @@ use Kernel\Abstractions\IEnvEngine;
 
 class _Artisan
 {
-    const GLOBAL_NAMESPACE = '\\Kernel\\Command\\';
-    const USER_NAMESPACE = '\\App\\Command\\';
+    const GLOBAL_NAMESPACE = '\\Kernel\\Command';
+    const USER_NAMESPACE = '\\App\\Command';
 
     public function __construct(AbsDbConnection $dbConnection, IEnvEngine $envEngine, IDataStorage $dataStorage)
     {
@@ -25,8 +25,10 @@ class _Artisan
     {
         $class = $this->getRequestedCommand();
 
-        $command = new $class($this->data_storage);
-        $command->run();
+        if($class){
+            $command = new $class($this->data_storage, $this->db_connection);
+            $command->run();
+        }
     }
 
     public function showHelpContent(): void
@@ -64,7 +66,7 @@ class _Artisan
 
         if (count($args) == 0) {
             $this->showHelpContent();
-            return;
+            return false;
         }
 
         $command = explode(':', trim(array_shift($args)));
@@ -78,16 +80,20 @@ class _Artisan
     {
         $command = $this->data_storage->get('command', null);
 
-        $class = self::GLOBAL_NAMESPACE . ucwords($command);
+        $class = self::GLOBAL_NAMESPACE . "\\" . ucwords($command);
 
         if (!class_exists($class)) {
-            $class = self::USER_NAMESPACE . ucwords($command);
+            $class = self::USER_NAMESPACE . "\\" . ucwords($command);
         }
 
         if (!class_exists($class)) {
+            print("Command not found!\n");
+
             $this->showHelpContent();
             return null;
         }
+
+        return $class;
 
     }
 }
