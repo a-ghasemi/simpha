@@ -22,6 +22,6 @@ class Redirect
 
     static function to($target, $status_code)
     {
-        return (new Self($target, $status_code));
+        return (new self($target, $status_code));
     }
 }

@@ -3,9 +3,9 @@
 
 namespace App\Controllers;
 
-use Kernel\Controller;
+use Kernel\Abstractions\AbsController;
 
-class HomeController extends Controller
+class HomeController extends AbsController
 {
     protected function get_index(){
         return view("home.index");

@@ -3,10 +3,9 @@
 
 namespace App\Controllers;
 
-use App\Models\User;
-use Kernel\Controller;
+use Kernel\Abstractions\AbsController;
 
-class AdminController extends Controller
+class AdminController extends AbsController
 {
     protected function get_index()
     {

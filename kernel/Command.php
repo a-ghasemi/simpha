@@ -34,7 +34,7 @@ abstract class Command
 
     protected function error($message)
     {
-        print($message."\n");
+        $this->comment($message);
         die();
     }
 

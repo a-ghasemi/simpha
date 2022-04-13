@@ -9,11 +9,6 @@ class ClassMap
 {
     public static function map(string $namespace, string $path): array
     {
-        return self::searchClasses($namespace, $path);
-    }
-
-    private static function searchClasses(string $namespace, string $path): array
-    {
         $classes = [];
 
         /**
@@ -27,7 +22,7 @@ class ClassMap
             if ($item->isDir()) {
                 $nextPath = $iterator->current()->getPathname();
                 $nextNamespace = $namespace . '\\' . $item->getFilename();
-                $classes = array_merge($classes, self::searchClasses($nextNamespace, $nextPath));
+                $classes = array_merge($classes, self::map($nextNamespace, $nextPath));
                 continue;
             }
             if ($item->isFile() && $item->getExtension() === 'php') {

@@ -7,14 +7,6 @@ function global_errors($key = null)
             : \Kernel\Kernel::$global_errors ?? \Kernel\Artisan::$global_errors ?? null;
 }
 
-function env_get($key, $default = null)
-{
-    $ret = \Kernel\Kernel::$env[$key] ?? \Kernel\Artisan::$env[$key] ?? $default;
-    if($ret === 'true') $ret = true;
-    if($ret === 'false') $ret = false;
-    return $ret;
-}
-
 function view($blade_path, $data = [])
 {
     return \Kernel\View::show($blade_path,$data);

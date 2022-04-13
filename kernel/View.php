@@ -24,7 +24,7 @@ class View
     }
 
     static function show(string $file,array $data = []){
-        return (new Self($file,$data))->render();
+        return (new self($file,$data))->render();
     }
 
     public function getContent(){

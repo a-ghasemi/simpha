@@ -1,53 +1,26 @@
 <?php
 
-namespace Kernel;
+namespace Kernel\Abstractions;
 
-
-class DB
+abstract class AbsDbConnection
 {
+    protected IEnvEngine $env_engine;
+    protected IErrorHandler $error_handler;
 
-    private $connection;
+    protected string $state;
 
-    private $server_name;
-    private $server_port;
-    private $username;
-    private $password;
-    private $db_name;
-
-    public $state;
-    public $error;
-    public $on_demand;
-
-    function __construct($server_name, $server_port, $username, $password, $db_name, $on_demand = false)
-    {
-        $this->server_name = $server_name;
-        $this->server_port = $server_port;
-        $this->on_demand = $on_demand;
-
-        $this->db_name = $db_name;
-        $this->username = $username;
-        $this->password = $password;
-
-        $this->error = null;
+    public function __construct(IEnvEngine $envEngine, IErrorHandler $errorHandler){
+//        $this->on_demand = $on_demand;
+        $this->env_engine = $envEngine;
+        $this->error_handler = $errorHandler;
         $this->state = 'created';
+
+        $this->connect();
     }
 
-    public function connect(){
-        try{
-            $this->connection = new \mysqli($this->server_name, $this->username, $this->password, $this->db_name);
-        }
-        catch(\Exception $e){}
+    abstract protected function connect();
 
-        if ($this->connection->connect_error) {
-            $this->error = $this->connection->connect_error;
-            $this->state = 'error';
-            return;
-        }
-
-        $this->connection->autocommit(!$this->on_demand);
-        $this->state = 'connected';
-    }
-
+/*
     public function disconnect(){
         if($this->state !== 'connected') return;
         $this->connection->close();
@@ -280,4 +253,5 @@ class DB
         return $columns;
     }
 
+*/
 }

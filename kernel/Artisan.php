@@ -12,7 +12,7 @@ class Artisan
 
     public function __construct()
     {
-        Self::$env = (new EnvParser(base_path(".env")))->parse();
+        self::$env = (new EnvEngineEngine(base_path(".env")))->parse();
 
         if(env_get('DEBUG_MODE',false)) {
             ini_set('display_errors',1);
