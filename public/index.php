@@ -2,12 +2,12 @@
 
 include("../vendor/autoload.php");
 
-use \Kernel\Kernel;
+use \Kernel\_Kernel;
 
 $envEngine = new \Kernel\EnvEngineEngine();
-$dataStorage = new \Kernel\DataStorage();
+$dataStorage = new \Kernel\ArrayDataStorage();
 $errorHandler = new \Kernel\ErrorHandler();
 $dbConnection = new \Kernel\MysqlDbConnection($envEngine, $errorHandler);
 
-$app = new Kernel($dbConnection, $envEngine, $dataStorage);
+$app = new _Kernel($dbConnection, $envEngine, $dataStorage);
 $app->run();

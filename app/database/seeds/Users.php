@@ -5,9 +5,9 @@ namespace App\database\seeds;
 
 
 use App\Models\User;
-use Kernel\Seed;
+use Kernel\Abstractions\AbsSeed;
 
-class Users extends Seed
+class Users extends AbsSeed
 {
     public function run(){
         User::create([

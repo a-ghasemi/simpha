@@ -3,9 +3,9 @@
 
 namespace App\Models;
 
-use Kernel\Model;
+use Kernel\Abstractions\AbsModel;
 
-class User extends Model
+class User extends AbsModel
 {
     protected $fillable = ['username', 'password'];
 }

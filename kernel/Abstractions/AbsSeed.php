@@ -1,11 +1,9 @@
 <?php
 
 
-namespace Kernel;
+namespace Kernel\Abstractions;
 
-use Kernel\DB;
-
-abstract class Seed
+abstract class AbsSeed
 {
     protected $database;
 

@@ -3,9 +3,9 @@
 namespace Kernel\Command;
 
 
-use Kernel\Command;
+use Kernel\AbsCommand;
 
-class Install extends Command
+class Install extends AbsCommand
 {
     public function index(){
         $this->comment('Composer install');

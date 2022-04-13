@@ -94,13 +94,5 @@
                 </div>
             </div>
         </div>
-
-        @if(global_errors())
-            <div class="errors">
-                @foreach(global_errors() as $error)
-                    <div class="error">{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
     </body>
 </html>

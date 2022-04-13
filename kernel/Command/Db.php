@@ -3,22 +3,18 @@
 namespace Kernel\Command;
 
 
+use Kernel\Abstractions\AbsDbConnection;
 use Kernel\ClassMap;
-use Kernel\Command;
+use Kernel\AbsCommand;
 
-class Db extends Command
+class Db extends AbsCommand
 {
     private $database;
 
     public function check()
     {
-        $this->connectDatabase(
-            env_get('DB_USER'),
-            env_get('DB_PASS'),
-            env_get('DB_NAME'),
-            env_get('DB_HOST', 'localhost'),
-            env_get('DB_PORT', 3306),
-        );
+
+
         $this->comment('Database Connection Successfully.');
     }
 
@@ -81,14 +77,5 @@ class Db extends Command
         $this->rollback();
         $this->migrate();
         $this->seed();
-    }
-
-    private function connectDatabase($user, $pass, $db_name, $host = 'localhost', $port = '3306')
-    {
-        $this->database = new \Kernel\DB($host, $port, $user, $pass, $db_name);
-        $this->database->connect();
-        if ($this->database->error) {
-            $this->error("Database Connection Failed!");
-        }
     }
 }

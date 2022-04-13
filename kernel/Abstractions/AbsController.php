@@ -3,15 +3,15 @@
 
 namespace Kernel\Abstractions;
 
-use Kernel\Abstractions\AbsDataStorage;
+use Kernel\Abstractions\IDataStorage;
 use Kernel\Abstractions\AbsDbConnection;
 
 abstract class AbsController
 {
     protected AbsDbConnection $db_connection;
-    protected AbsDataStorage $data_storage;
+    protected IDataStorage $data_storage;
 
-    public function __construct(AbsDbConnection $dbConnection, AbsDataStorage $dataStorage)
+    public function __construct(AbsDbConnection $dbConnection, IDataStorage $dataStorage)
     {
         $this->db_connection = $dbConnection;
         $this->data_storage = $dataStorage;

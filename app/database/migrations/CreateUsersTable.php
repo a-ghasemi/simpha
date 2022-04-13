@@ -4,15 +4,15 @@
 namespace App\database\migrations;
 
 
-use Kernel\Migration;
+use Kernel\Abstractions\AbsMigration;
 
-class CreateUsersTable extends Migration
+class CreateUsersTable extends AbsMigration
 {
     public function up(){
         $this->create_table('users',[
             $this->autoincremental('id', 7),
             $this->string('username', 150),
-            $this->string('password', 255),
+            $this->string('password'),
             $this->timestamps(),
         ]);
     }

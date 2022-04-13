@@ -14,9 +14,9 @@ class ErrorHandler implements IErrorHandler
         $this->error_stack = [];
     }
 
-    public function addError($title, $message)
+    public function addError($title, $message = null)
     {
-        array_push($this->error_stack, ['title' => $title , 'message' => $message]);
+        array_push($this->error_stack, ['title' => $title , 'message' => $message ?? $title]);
         $this->status = 'error';
     }
 

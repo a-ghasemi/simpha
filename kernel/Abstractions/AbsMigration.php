@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Kernel;
+namespace Kernel\Abstractions;
 
 use Kernel\DB;
 
-class Migration
+class AbsMigration
 {
     private $database;
 

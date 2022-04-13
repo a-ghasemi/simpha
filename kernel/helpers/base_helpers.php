@@ -1,15 +1,8 @@
 <?php
 
-function global_errors($key = null)
-{
-    return $key ?
-            \Kernel\Kernel::$global_errors[$key] ?? \Kernel\Artisan::$global_errors[$key] ?? null
-            : \Kernel\Kernel::$global_errors ?? \Kernel\Artisan::$global_errors ?? null;
-}
-
 function view($blade_path, $data = [])
 {
-    return \Kernel\View::show($blade_path,$data);
+    return \Kernel\View::show($blade_path, $data);
 }
 
 function redirect($target, $status_code = 200)
@@ -19,7 +12,8 @@ function redirect($target, $status_code = 200)
 
 function base_path($dir = '')
 {
-    return realpath(__DIR__ . implode('..', [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR])) . DIRECTORY_SEPARATOR . $dir;
+    return realpath(__DIR__ . implode('..', [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR,
+                DIRECTORY_SEPARATOR])) . DIRECTORY_SEPARATOR . $dir;
 }
 
 function storage_path($dir = '')

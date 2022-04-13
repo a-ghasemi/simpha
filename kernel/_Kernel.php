@@ -2,11 +2,11 @@
 
 namespace Kernel;
 
-use Kernel\Abstractions\AbsDataStorage;
+use Kernel\Abstractions\IDataStorage;
 use Kernel\Abstractions\AbsDbConnection;
 use Kernel\Abstractions\IEnvEngine;
 
-class Kernel
+class _Kernel
 {
     protected $env_engine;
     protected $data_storage;
@@ -14,7 +14,7 @@ class Kernel
 
     static $global_errors;
 
-    public function __construct(AbsDbConnection $dbConnection, IEnvEngine $envEngine, AbsDataStorage $dataStorage)
+    public function __construct(AbsDbConnection $dbConnection, IEnvEngine $envEngine, IDataStorage $dataStorage)
     {
         $this->env_engine = $envEngine;
         $this->db_connection = $dbConnection;

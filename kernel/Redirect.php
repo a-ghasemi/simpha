@@ -2,7 +2,6 @@
 
 namespace Kernel;
 
-
 class Redirect
 {
     private $target;
